@@ -224,7 +224,7 @@
 </template>
  
 <script>
-import { ElMessage } from 'element-plus'
+
 	export default {
 		data() {
 			return {
@@ -239,7 +239,7 @@ import { ElMessage } from 'element-plus'
 			async handleSignup() {
 			// 这里处理注册逻辑
 			if(this.username===""){
-				ElMessage({
+				this.$message({
 				type: 'error',
 				message: '用户名不能为空',
 				showClose: true,
@@ -247,7 +247,7 @@ import { ElMessage } from 'element-plus'
 				return
 			}
 			if(this.password===""){
-				ElMessage({
+				this.$message({
 				type: 'error',
 				message: '密码不能为空',
 				showClose: true,
@@ -262,28 +262,28 @@ import { ElMessage } from 'element-plus'
 			//调用api接口
 			await this.$api.sign_up(res).then((param)=>{
 			if (param.data.code === 0) {
-				ElMessage({
+				this.$message({
 				type: 'success',
 				message: '注册成功!',
 			})
   			}
 			else if(param.data.code === 1){
 				// this.$alert.put("用户名已经存在,请您修改用户名")
-				ElMessage({
+				this.$message({
 				type: 'error',
 				message: '用户名已经存在,请您修改用户名',
 			})
 			}
 			else if(param.data.code === 2){
 				// this.$alert.put("添加用户失败")
-				ElMessage({
+				this.$message({
 				type: 'error',
 				message: '添加用户失败',
 			})
 			}
 			else{
 				// this.$alert.put("未知错误,请联系管理员")
-				ElMessage({
+				this.$message({
 				type: 'error',
 				message: '未知错误,请联系管理员',
 			})
@@ -299,7 +299,7 @@ import { ElMessage } from 'element-plus'
 			if(this.username===""){
 				localStorage.setItem('jwttoken', "")
 				// this.$alert.put("用户名不能为空")
-				ElMessage({
+				this.$message({
 				type: 'error',
 				message: '用户名不能为空',
 			})
@@ -309,7 +309,7 @@ import { ElMessage } from 'element-plus'
 			if(this.password===""){
 				localStorage.setItem('jwttoken', "")
 				// this.$alert.put("密码不能为空")
-				ElMessage({
+				this.$message({
 				type: 'error',
 				message: '密码不能为空',
 			})
@@ -326,7 +326,7 @@ import { ElMessage } from 'element-plus'
 			if (param.data.code === 0) {
     			// alert("注册成功")
 				// this.$alert.put("登录成功")
-				ElMessage({
+				this.$message({
 				type: 'success',
 				message: '登录成功',
 			})
@@ -337,7 +337,7 @@ import { ElMessage } from 'element-plus'
 			else{
 				localStorage.setItem('jwttoken', "")
 				// this.$alert.put("密码错误")
-				ElMessage({
+				this.$message({
 				type: 'error',
 				message: '密码错误',
 			})
