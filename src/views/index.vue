@@ -194,13 +194,13 @@
 					<h2 class="overlaylongH2">登录</h2>
 					<input type="text" placeholder="请输入用户名" v-model="username" >
 					<input type="password" placeholder="请输入密码" v-model="password">
-					<button class="inupbutton" @click="handleSignin">登录</button>
+					<button  class="inupbutton" @click="handleSignin">登录</button>
 				</div>
 				<div class="overlaylong-Signup" v-if="disfiex == 1">
 					<h2 class="overlaylongH2">注册</h2>
 					<input type="text" placeholder="请输入用户名" v-model="username" >
 					<input type="password" placeholder="请输入密码" v-model="password">
-					<button class="inupbutton" @click="handleSignup">注册</button>
+					<button  class="inupbutton" @click="handleSignup">注册</button>
 				</div>
  
 			</div>
@@ -224,7 +224,7 @@
 </template>
  
 <script>
-
+import { ElMessage } from 'element-plus'
 	export default {
 		data() {
 			return {
@@ -239,11 +239,19 @@
 			async handleSignup() {
 			// 这里处理注册逻辑
 			if(this.username===""){
-				this.$alert.put("用户名不能为空")
+				ElMessage({
+				type: 'error',
+				message: '用户名不能为空',
+				showClose: true,
+			})
 				return
 			}
 			if(this.password===""){
-				this.$alert.put("密码不能为空")
+				ElMessage({
+				type: 'error',
+				message: '密码不能为空',
+				showClose: true,
+			})
 				return
 			}
 			//将请求转为对象
@@ -254,17 +262,31 @@
 			//调用api接口
 			await this.$api.sign_up(res).then((param)=>{
 			if (param.data.code === 0) {
-				// this.$router.push('/login')
-				this.$alert.put("注册成功")
+				ElMessage({
+				type: 'success',
+				message: '注册成功!',
+			})
   			}
 			else if(param.data.code === 1){
-				this.$alert.put("用户名已经存在,请您修改用户名")
+				// this.$alert.put("用户名已经存在,请您修改用户名")
+				ElMessage({
+				type: 'error',
+				message: '用户名已经存在,请您修改用户名',
+			})
 			}
 			else if(param.data.code === 2){
-				this.$alert.put("添加用户失败")
+				// this.$alert.put("添加用户失败")
+				ElMessage({
+				type: 'error',
+				message: '添加用户失败',
+			})
 			}
 			else{
-				this.$alert.put("未知错误,请联系管理员")
+				// this.$alert.put("未知错误,请联系管理员")
+				ElMessage({
+				type: 'error',
+				message: '未知错误,请联系管理员',
+			})
 			}
 			})
 			this.username="";
@@ -276,12 +298,21 @@
 
 			if(this.username===""){
 				localStorage.setItem('jwttoken', "")
-				this.$alert.put("用户名不能为空")
+				// this.$alert.put("用户名不能为空")
+				ElMessage({
+				type: 'error',
+				message: '用户名不能为空',
+			})
+				
 				return
 			}
 			if(this.password===""){
 				localStorage.setItem('jwttoken', "")
-				this.$alert.put("密码不能为空")
+				// this.$alert.put("密码不能为空")
+				ElMessage({
+				type: 'error',
+				message: '密码不能为空',
+			})
 				return
 			}
 
@@ -294,15 +325,22 @@
 			await this.$api.sign_in(res).then((param)=>{
 			if (param.data.code === 0) {
     			// alert("注册成功")
-				this.$alert.put("登录成功")
+				// this.$alert.put("登录成功")
+				ElMessage({
+				type: 'success',
+				message: '登录成功',
+			})
 				localStorage.setItem('token', param.data.token)
-				console.log(param)
 				// console.log(localStorage.getItem('jwttoken'))
 				this.$router.push('/cpuinfo')
   			}
 			else{
 				localStorage.setItem('jwttoken', "")
-				this.$alert.put("密码错误")
+				// this.$alert.put("密码错误")
+				ElMessage({
+				type: 'error',
+				message: '密码错误',
+			})
 			}
 			})
 			this.username="";

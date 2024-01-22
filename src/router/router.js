@@ -1,7 +1,8 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import index from '@/views/index.vue'
 import cpuinfo from '@/views/cpuinfo.vue'
-
+import NProgress from 'nprogress'
+import * as api from '@/api/index.js'
 const routes = [
   {
     path: '/',
@@ -49,5 +50,6 @@ router.beforeEach((to, from, next) => {
     next(); // 不需要进行鉴权，直接进行下一步路由
   }
 });
+
 
 export default router
