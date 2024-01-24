@@ -5,20 +5,6 @@ const routes = [
     path: '/',
     component: () => import('@/views/index.vue'),
   },
-  // {
-  //   path: '/cpuinfo',
-  //   component: () => import('@/views/components/cpuinfo.vue'),
-  //   meta: {
-  //      requiresAuth: true 
-  //     }
-  // },
-  // {
-  //   path: '/gpuinfo',
-  //   component: () => import('@/views/components/gpuinfo.vue'),
-  //   meta: {
-  //      requiresAuth: true 
-  //     }
-  // },
   {
     path: '/layout',
     component: () => import('@/views/layout.vue'),
@@ -26,6 +12,13 @@ const routes = [
        requiresAuth: true 
       },
       children:[
+        {
+          path: '/layout',
+          component: () => import('@/views/components/gpuinfo.vue'),
+          meta: {
+             requiresAuth: true 
+            }
+        },
         {
           path: '/gpuinfo',
           component: () => import('@/views/components/gpuinfo.vue'),
@@ -36,6 +29,13 @@ const routes = [
         {
           path: '/cpuinfo',
           component: () => import('@/views/components/cpuinfo.vue'),
+          meta: {
+             requiresAuth: true 
+            }
+        },
+        {
+          path: '/initdatabase',
+          component: () => import('@/views/components/initdatabase.vue'),
           meta: {
              requiresAuth: true 
             }

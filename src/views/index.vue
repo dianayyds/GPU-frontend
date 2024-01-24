@@ -2,6 +2,7 @@
 
 
 	.center {
+		min-height: 100vh;
 
 		height: 765px;
 		background-image: url('https://pic4.zhimg.com/v2-7f4cd731e0a8757eff08b1e31f5d4abf_r.jpg');
@@ -331,7 +332,7 @@
 				message: '登录成功',
 			})
 				localStorage.setItem('token', param.data.token)
-				// console.log(localStorage.getItem('jwttoken'))
+				// console.log(localStorage.getItem('token'))
 				this.$router.push('/layout')
   			}
 			else{

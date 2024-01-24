@@ -1,26 +1,26 @@
 <!-- Aside.vue -->
 <template>
   <el-aside :width="asideWidth">   
-         <div style="height: 60px; line-height: 60px; font-size: 20px; display: flex; align-items: center; justify-content: center">
+         <div style="height: 70px; line-height: 60px; font-size: 20px; display: flex; align-items: center; justify-content: center">
            <el-avatar :size="50" :src="qq"/>
            <span class="logo-title" v-show="!isCollapse">战斗爽系统</span>
          </div>
          <el-menu router :collapse="isCollapse" :collapse-transition="false" background-color="#001529"
-                  active-text-color="#fff" text-color="rgba(255, 255, 255, 0.65)" :default-active="$route.path"
+                  active-text-color="#fff" text-color="rgba(255, 255, 255, 0.65)" 
                   style="border: none">
-           <el-menu-item index="/">
-            <el-icon><location /></el-icon>
-             <span slot="title">回到登录页</span>
+          <el-menu-item index="/initdatabase">
+            <el-icon><InfoFilled /></el-icon>
+             <span>初始化数据库</span>
            </el-menu-item>
 
            <el-menu-item index="/cpuinfo">
-            <el-icon><location /></el-icon>
-             <span slot="title">GPU</span>
+            <el-icon><InfoFilled /></el-icon>
+             <span>CPU信息</span>
            </el-menu-item>
 
            <el-menu-item index="/gpuinfo">
             <el-icon><location /></el-icon>
-             <span slot="title">CPU</span>
+             <span>GPU信息</span>
            </el-menu-item>
 
          </el-menu>
@@ -46,6 +46,11 @@ import src from '@/assets/tafei_yeah.jpg'
   
   
  <style>
+
+.el-menu-item:hover{
+    outline: 0 !important;
+    color: #409EFF !important;
+}
  /* 侧边栏里面选中菜单的背景色   !important代表这个优先级很高*/
  .el-menu--inline, .el-menu-item {
    background-color: #000c17 !important;
@@ -70,10 +75,10 @@ import src from '@/assets/tafei_yeah.jpg'
  .el-menu-item {
    min-width: 0 !important;   /*允许最小屏幕的宽度  */
    width: calc(100% - 10px);
-   margin: 5px;   /*菜单项主键的间距  */
-   height: 40px !important;    /*首页菜单高度大小  */
-   line-height: 40px !important;    /*二级菜单大小，最好和上面一样  */
-   border-radius: 10px;  /*菜单标题的边框添加圆角，越大越圆*/
+   margin: 10px;   /*菜单项主键的间距  */
+   height: 70px !important;    /*首页菜单高度大小  */
+   line-height: 70px !important;    /*二级菜单大小，最好和上面一样  */
+   border-radius: 8px;  /*菜单标题的边框添加圆角，越大越圆*/
  }
  /* 菜单栏二级标题左移 （去掉也没关系） */
  .el-menu--inline>.el-menu-item {
