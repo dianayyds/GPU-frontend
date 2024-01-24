@@ -2,7 +2,7 @@
 <template>
   <el-aside :width="asideWidth">   
          <div style="height: 60px; line-height: 60px; font-size: 20px; display: flex; align-items: center; justify-content: center">
-           <img src="@/assets/logo.png" style="width: 30px;" alt="">
+           <el-avatar :size="50" :src="qq"/>
            <span class="logo-title" v-show="!isCollapse">战斗爽系统</span>
          </div>
          <el-menu router :collapse="isCollapse" :collapse-transition="false" background-color="#001529"
@@ -28,11 +28,17 @@
  </template>
   
  <script>
+import src from '@/assets/tafei_yeah.jpg'
  export default {
    name: 'Aside',
    props: {
      asideWidth: String,
      isCollapse: Boolean
+   },
+   data(){
+    return{
+      qq:src
+    }
    }
 
  };
