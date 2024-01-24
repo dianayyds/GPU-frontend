@@ -2,14 +2,16 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from '@/router/router.js'
 import * as api from '@/api/index.js'
-// import * as alert from '@/alert/alert.js'
-import { ElMessage } from "element-plus";
+import { ElMessage } from "element-plus"
+import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 const app=createApp(App)
 app.config.globalProperties.$api=api
 app.config.globalProperties.$message = ElMessage;
-
-// app.config.globalProperties.$alert=alert
-app.use(router)
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component)
+  }
+app.use(router).use(ElementPlus)
 app.mount('#app')

@@ -332,7 +332,7 @@
 			})
 				localStorage.setItem('token', param.data.token)
 				// console.log(localStorage.getItem('jwttoken'))
-				this.$router.push('/cpuinfo')
+				this.$router.push('/layout')
   			}
 			else{
 				localStorage.setItem('jwttoken', "")
