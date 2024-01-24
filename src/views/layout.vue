@@ -23,6 +23,7 @@ export default {
   },
   data() {
     return {
+      test:"test",
       isCollapse: false,   //展开
       asideWidth: '200px',   //侧边栏默认值为200
       collapseIcon: 'el-icon-s-fold'   //展开图标箭头向左
