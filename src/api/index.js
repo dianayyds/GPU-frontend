@@ -2,7 +2,7 @@ import request from '../utils/request.js'
 export function sign_in(params){
     return request({
         url:'/sign_in',
-        method:'get',
+        method:'post',
         params
     })
 }
@@ -10,7 +10,7 @@ export function sign_in(params){
 export function sign_up(params){
     return request({
         url:'/sign_up',
-        method:'get',
+        method:'post',
         params
     })
 }
@@ -18,7 +18,7 @@ export function sign_up(params){
 export function parse_token(params){
     return request({
         url:'/parse_jwt',
-        method:'get',
+        method:'post',
         params
     })
 }
@@ -26,7 +26,15 @@ export function parse_token(params){
 export function cpu_info(params){
     return request({
         url:'/cpu_info',
-        method:'get',
+        method:'post',
+        params
+    })
+}
+
+export function init_database(params){
+    return request({
+        url:'/init_database',
+        method:'post',
         params
     })
 }
