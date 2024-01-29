@@ -225,7 +225,6 @@
 </template>
  
 <script>
-
 	export default {
 		data() {
 			return {
@@ -256,6 +255,22 @@
 				return
 			}
 			//将请求转为对象
+			const usernameIsValid = /^[A-Za-z0-9]{6,20}$/.test(this.username);
+			const passwordIsValid = this.password.length >= 6;
+			if (!usernameIsValid) {
+				this.$message({
+				type: 'error',
+				message: '用户名必须长度为6到20个字符,且为小写字母或者数字',
+			})
+			return
+			}
+			if (!passwordIsValid) {
+				this.$message({
+				type: 'error',
+				message: '密码必须至少为6字符',
+			})
+			return
+			}
 			let res = {
 			Username: this.username, // 假设 this.username 是你从输入字段绑定的数据
 			Password: this.password,  // 同上，针对密码字段

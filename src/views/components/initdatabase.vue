@@ -24,9 +24,6 @@
       </el-form>
     </div>
 
-
-    
-
     <div v-else class="db-initialized">
       <p>您已经初始化了数据库,该数据库为<el-icon><Box /></el-icon>{{dbInfo.DatabaseName }}</p>
       <el-button @click="resetInitialization">重新设置点击这里</el-button>
@@ -51,12 +48,18 @@
         isDatabaseInitialized:localStorage.getItem('isDatabaseInitialized') === 'true'
       };
     },
-    methods: {
-        mounted(){
+    mounted(){
+          
           let res=localStorage.getItem('isDatabaseInitialized')
           if(res="")
+          {
             localStorage.setItem('isDatabaseInitialized', 'false');
+            this.$store.state.isDatabaseInitialized=localStorage.getItem('isDatabaseInitialized')
+          }
+          console.log("this.$store.state.count:",this.$store.state.isDatabaseInitialized)
         },
+    methods: {
+          
         resetForm(){
             dbInfo.Ip=""
             dbInfo.Port=""
@@ -78,6 +81,7 @@
             localStorage.setItem('isDatabaseInitialized', 'true');
             this.isDatabaseInitialized=localStorage.getItem('isDatabaseInitialized') === 'true'
             localStorage.setItem('DatabaseName',this.dbInfo.DatabaseName)
+            
           }
           else{
             this.$message({

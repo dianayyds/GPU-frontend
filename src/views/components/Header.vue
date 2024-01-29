@@ -27,7 +27,6 @@ export default {
           Token:token
       }
     await this.$api.parse_token(res).then((params)=>{
-      console.log("layout-params",params)
       this.username=params.data.claims.username
     }
     )
@@ -40,6 +39,9 @@ export default {
   name: 'Header',
   methods:{
     log_out(){
+      localStorage.removeItem('token')
+      localStorage.removeItem('isDatabaseInitialized')
+      localStorage.removeItem('DatabaseName')
       this.$router.push('/')
     }
 
