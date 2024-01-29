@@ -24,10 +24,14 @@
       </el-form>
     </div>
 
+
+    
+
     <div v-else class="db-initialized">
-      <p>您已经初始化了数据库</p>
+      <p>您已经初始化了数据库,该数据库为<el-icon><Box /></el-icon>{{dbInfo.DatabaseName }}</p>
       <el-button @click="resetInitialization">重新设置点击这里</el-button>
     </div>
+
 
     
   </template>
@@ -40,7 +44,7 @@
         dbInfo: {
             Ip: '127.0.0.1', // 设置默认的 IP 地址
             Port: '3306',    // 也可以为其他字段设置默认值，例如默认的端口号
-            DatabaseName: '',    // 其他字段可以保留为空或设置相应的默认值
+            DatabaseName: localStorage.getItem('DatabaseName'),    // 其他字段可以保留为空或设置相应的默认值
             Username: 'root', // 默认用户名
             Password: ''     // 默认密码可以为空，视安全策略而定
         },
@@ -49,9 +53,10 @@
     },
     methods: {
         mounted(){
-            localStorage.setItem('isDatabaseInitialized', 'true');
+          let res=localStorage.getItem('isDatabaseInitialized')
+          if(res="")
+            localStorage.setItem('isDatabaseInitialized', 'false');
         },
-
         resetForm(){
             dbInfo.Ip=""
             dbInfo.Port=""
@@ -60,17 +65,19 @@
             dbInfo.Password=""
         },
         resetInitialization(){
-            this.isDatabaseInitialized=false
+          localStorage.setItem('isDatabaseInitialized', 'false')
+          this.isDatabaseInitialized=localStorage.getItem('isDatabaseInitialized') === 'true'
         },
       async submitForm() {
         await this.$api.init_database(this.dbInfo).then((params)=>{
-          console.log("init_database-params",params)
           if(params.data.code==0){
             this.$message({
               message: '数据库初始化成功',
               type: 'success'
             });
-            this.isDatabaseInitialized=true
+            localStorage.setItem('isDatabaseInitialized', 'true');
+            this.isDatabaseInitialized=localStorage.getItem('isDatabaseInitialized') === 'true'
+            localStorage.setItem('DatabaseName',this.dbInfo.DatabaseName)
           }
           else{
             this.$message({

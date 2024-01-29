@@ -14,7 +14,7 @@ const routes = [
       children:[
         {
           path: '/layout',
-          component: () => import('@/views/components/gpuinfo.vue'),
+          component: () => import('@/views/components/initdatabase.vue'),
           meta: {
              requiresAuth: true 
             }
