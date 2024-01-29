@@ -25,13 +25,11 @@
     </div>
 
     <div v-else class="db-initialized">
-      <p>您已经初始化了数据库,该数据库为<el-icon><Box /></el-icon>{{dbInfo.DatabaseName }}</p>
+      <div class="box1">您已经初始化了数据库,该数据库为<el-icon><Box /></el-icon>{{dbInfo.DatabaseName }}</div>
+
       <el-button @click="resetInitialization">重新设置点击这里</el-button>
     </div>
-
-
-    
-  </template>
+</template>
   
   <script>
   export default {
@@ -54,12 +52,12 @@
           if(res="")
           {
             localStorage.setItem('isDatabaseInitialized', 'false');
+            //调用store来存储信息
             this.$store.state.isDatabaseInitialized=localStorage.getItem('isDatabaseInitialized')
           }
-          console.log("this.$store.state.count:",this.$store.state.isDatabaseInitialized)
+          
         },
     methods: {
-          
         resetForm(){
             dbInfo.Ip=""
             dbInfo.Port=""
@@ -93,14 +91,14 @@
         }
         )
       },
-      resetForm() {
-        this.$refs.dbForm.resetFields();
-      }
     }
   };
   </script>
   
   <style>
+  .box1 {
+  margin-bottom: 20px; /* 在盒子 1 的底部添加 20px 的外边距 */
+}
   .db-initialized {
   display: flex;
   flex-direction: column;

@@ -3,6 +3,10 @@ import * as api from '@/api/index.js'
 import { ElMessage } from "element-plus"
 const routes = [
   {
+    path: '/:pathMatch(.*)*',
+    component: () => import('@/views/components/NotFound.vue'),
+  },
+  {
     path: '/',
     component: () => import('@/views/index.vue'),
   },
@@ -44,6 +48,7 @@ const routes = [
 
       ]
   },
+  
 
 ]
 

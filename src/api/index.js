@@ -23,11 +23,10 @@ export function parse_token(params){
     })
 }
 
-export function cpu_info(params){
+export function cpu_info(){
     return request({
         url:'/cpu_info',
-        method:'post',
-        params
+        method:'get',
     })
 }
 
