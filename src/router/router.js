@@ -1,6 +1,11 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import * as api from '@/api/index.js'
+import { ElMessage } from "element-plus"
 const routes = [
+  {
+    path: '/:pathMatch(.*)*',
+    component: () => import('@/views/components/NotFound.vue'),
+  },
   {
     path: '/',
     component: () => import('@/views/index.vue'),
@@ -14,7 +19,7 @@ const routes = [
       children:[
         {
           path: '/layout',
-          component: () => import('@/views/components/gpuinfo.vue'),
+          component: () => import('@/views/components/initdatabase.vue'),
           meta: {
              requiresAuth: true 
             }
@@ -43,6 +48,7 @@ const routes = [
 
       ]
   },
+  
 
 ]
 
@@ -56,8 +62,11 @@ router.beforeEach((to, from, next) => {
     // 获取token
     const token = localStorage.getItem('token');
     if (!token) { // token不存在，则跳转到登录页
+      ElMessage({
+        message: '请先登录',
+        type: 'error'
+      })
       next('/');
-      alert.put("请先登录")
     } else { // token存在，验证是否过期
       let res={
           Token:token
