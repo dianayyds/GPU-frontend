@@ -7,7 +7,7 @@ import axios from "axios";
 let request = axios.create({
   //基础路径
   baseURL: 'http://localhost:8080/v1',
-  timeout: 5000,
+  timeout: 50000,
 })
 
 

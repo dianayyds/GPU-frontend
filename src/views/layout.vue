@@ -24,7 +24,6 @@ export default {
   data() {
     return {
       username:"",
-      test:"test",
       isCollapse: false,   //展开
       asideWidth: '200px',   //侧边栏默认值为200
     };
