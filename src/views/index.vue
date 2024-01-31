@@ -1,7 +1,8 @@
 <style>
-button:hover {
-  background-color: pink; /* 举例颜色 */
-}
+	button:hover {
+	background-color: #29eac4; /* 举例颜色 */
+	}
+
 	.center {
 		min-height: 100vh;
 
@@ -174,7 +175,8 @@ button:hover {
 		cursor: pointer;
 	}
 	.inupbutton{
-		background-color: #29eac4;
+		background-color: pink;
+		/* background-color: #29eac4; */
 		border: none;
 		width: 180px;
 		height: 40px;
