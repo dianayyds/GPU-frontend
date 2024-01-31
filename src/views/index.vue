@@ -1,6 +1,7 @@
 <style>
-
-
+button:hover {
+  background-color: pink; /* 举例颜色 */
+}
 	.center {
 		min-height: 100vh;
 
