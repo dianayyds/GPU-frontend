@@ -7,6 +7,10 @@ const routes = [
     component: () => import('@/views/components/NotFound.vue'),
   },
   {
+    path: '/administrator',
+    component:() => import('@/views/administrator.vue'),
+  },
+  {
     path: '/',
     component: () => import('@/views/index.vue'),
   },
@@ -48,6 +52,7 @@ const routes = [
 
       ]
   },
+
   
 
 ]

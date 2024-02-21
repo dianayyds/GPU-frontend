@@ -37,3 +37,12 @@ export function init_database(params){
         params
     })
 }
+
+export function users_info(params){
+    return request({
+        url:'/users_info',
+        method:'get',
+        params
+    })
+}
+

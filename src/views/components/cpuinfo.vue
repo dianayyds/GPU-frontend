@@ -10,7 +10,7 @@
     mounted(){
       //开始即运行
       this.chart = markRaw(echarts.init(document.getElementById('cpuinfo')));
-      setInterval(this.fetchData, 1000);
+      setInterval(this.fetchData, 2000);
     },
     data(){
       return{
