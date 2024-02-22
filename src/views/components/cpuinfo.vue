@@ -9,9 +9,7 @@
   import * as echarts from 'echarts';
   import { markRaw } from 'vue';
   export default {
-    // mounted(){
-    //   updateChart()
-    // },
+
     data(){
       return{
         chart: null,

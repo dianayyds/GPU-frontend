@@ -336,9 +336,17 @@
 			}
 			this.$store.state.isAdmin=false;
 			//将请求转为对象
+
+	
+
 			let res = {
-			Username: this.username, // 假设 this.username 是你从输入字段绑定的数据
-			Password: this.password,  // 同上，针对密码字段
+				Username: this.username,
+				Password:this.password,
+				// Ip: '', // 设置默认的 IP 地址
+				// Port: '',    // 也可以为其他字段设置默认值，例如默认的端口号
+				// DatabaseName: '',    // 其他字段可以保留为空或设置相应的默认值
+				// DatabaseUsername: '', // 默认用户名
+				// DatabasePassword: ''     // 默认密码可以为空，视安全策略而定
 			};
 			//调用api接口
 			await this.$api.sign_in(res).then((param)=>{

@@ -54,3 +54,11 @@ export function delete_user(params){
     })
 }
 
+
+export function user_info_byname(params){
+    return request({
+        url:'/user_info_byname',
+        method:'get',
+        params
+    })
+}

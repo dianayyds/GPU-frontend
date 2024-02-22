@@ -7,12 +7,11 @@
         <el-form-item label="端口">
           <el-input v-model="dbInfo.Port" placeholder="请输入数据库端口"></el-input>
         </el-form-item>
-        
         <el-form-item label="账户名">
-          <el-input v-model="dbInfo.Username" placeholder="请输入账户名"></el-input>
+          <el-input v-model="dbInfo.DatabaseUsername" placeholder="请输入账户名"></el-input>
         </el-form-item>
         <el-form-item label="密码">
-          <el-input v-model="dbInfo.Password" placeholder="请输入密码" type="password"></el-input>
+          <el-input v-model="dbInfo.DatabasePassword" placeholder="请输入密码" type="password"></el-input>
         </el-form-item>
         <el-form-item label="数据库名">
           <el-input v-model="dbInfo.DatabaseName" placeholder="请输入数据库名"></el-input>
@@ -33,53 +32,82 @@
   
   <script>
   export default {
-    name: 'DatabaseForm',
-    data() {
-      return {
-        dbInfo: {
-            Ip: '127.0.0.1', // 设置默认的 IP 地址
-            Port: '3306',    // 也可以为其他字段设置默认值，例如默认的端口号
-            DatabaseName: localStorage.getItem('DatabaseName'),    // 其他字段可以保留为空或设置相应的默认值
-            Username: 'root', // 默认用户名
-            Password: ''     // 默认密码可以为空，视安全策略而定
-        },
-        isDatabaseInitialized:localStorage.getItem('isDatabaseInitialized') === 'true'
-      };
-    },
-    mounted(){
-          
-          let res=localStorage.getItem('isDatabaseInitialized')
-          if(res="")
-          {
-            localStorage.setItem('isDatabaseInitialized', 'false');
-            //调用store来存储信息
-            this.$store.state.isDatabaseInitialized=localStorage.getItem('isDatabaseInitialized')
-          }
-          
-        },
-    methods: {
-        resetForm(){
-            dbInfo.Ip=""
-            dbInfo.Port=""
-            dbInfo.DatabaseName=""
-            dbInfo.Username=""
-            dbInfo.Password=""
-        },
-        resetInitialization(){
-          localStorage.setItem('isDatabaseInitialized', 'false')
-          this.isDatabaseInitialized=localStorage.getItem('isDatabaseInitialized') === 'true'
-        },
-      async submitForm() {
-        await this.$api.init_database(this.dbInfo).then((params)=>{
+   async mounted(){
+      let res={
+            Token:localStorage.getItem('token')
+        }
+      await this.$api.parse_token(res).then((params)=>{
+        res={
+          username:params.data.claims.username
+        }
+      }
+      )
+      await this.$api.user_info_byname(res).then((params)=>{
+        //params.data.user.Ip
+        if(params.data.user.Ip==='')
+        {
+          this.isDatabaseInitialized=false;
+        }else{
+          this.isDatabaseInitialized=true;
+          this.$api.init_database(params.data.user).then((params)=>{
           if(params.data.code==0){
             this.$message({
               message: '数据库初始化成功',
               type: 'success'
             });
-            localStorage.setItem('isDatabaseInitialized', 'true');
-            this.isDatabaseInitialized=localStorage.getItem('isDatabaseInitialized') === 'true'
-            localStorage.setItem('DatabaseName',this.dbInfo.DatabaseName)
-            
+          }
+          else{
+            this.$message({
+              message: params.data.msg.Message,
+              type: 'error'
+            });
+          }
+
+        }
+        )
+        }
+      }
+      )
+    },
+
+    data() {
+      return {
+        dbInfo: {
+          Username: '',
+          Password:'',
+          Ip: '127.0.0.1', // 设置默认的 IP 地址
+          Port: '3306',    // 也可以为其他字段设置默认值，例如默认的端口号
+          DatabaseName: '',    // 其他字段可以保留为空或设置相应的默认值
+          DatabaseUsername: 'root', // 默认用户名
+          DatabasePassword: ''     // 默认密码可以为空，视安全策略而定
+        },
+        isDatabaseInitialized:false
+      };
+    },
+    methods: {
+        resetForm(){
+            this.dbInfo.Ip=""
+            this.dbInfo.Port=""
+            this.dbInfo.DatabaseName=""
+            this.dbInfo.DatabaseUsername=""
+            this.dbInfo.DatabasePassword=""
+        },
+      async submitForm() {
+        let res={
+            Token:localStorage.getItem('token'),
+        }
+        await this.$api.parse_token(res).then((params)=>{
+          this.dbInfo.Username=params.data.claims.username
+          this.dbInfo.Password=params.data.claims.password
+      }
+      )
+        await this.$api.init_database(this.dbInfo).then((params)=>{
+          if(params.data.code==0){
+            this.isDatabaseInitialized=true;
+            this.$message({
+              message: '数据库初始化成功',
+              type: 'success'
+            });
           }
           else{
             this.$message({
@@ -91,6 +119,9 @@
         }
         )
       },
+      resetInitialization(){
+        this.isDatabaseInitialized=false;
+      }
     }
   };
   </script>
