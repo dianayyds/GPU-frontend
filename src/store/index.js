@@ -9,6 +9,7 @@ const store = createStore({
         DatabaseName:'',
         cpuxdata:[],
         cpuydata:[],
+        isAdmin:false,
       }
     },
     mutations,

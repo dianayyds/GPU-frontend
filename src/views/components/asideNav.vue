@@ -22,12 +22,21 @@
            </el-menu-item>
           </div>
 
-          <div v-if=isAdmin>
+          <div v-if=!isAdmin>
            <el-menu-item index="/gpuinfo">
-            <el-icon><location /></el-icon>
+            <el-icon><InfoFilled /></el-icon>
              <span>GPU信息</span>
            </el-menu-item>
           </div>
+
+          <div v-if=isAdmin>
+           <el-menu-item index="/Userinfo">
+            <el-icon><location /></el-icon>
+             <span>用户信息</span>
+           </el-menu-item>
+          </div>
+
+
 
          </el-menu>
        </el-aside>
@@ -36,22 +45,13 @@
  <script>
 import src from '@/assets/tafei_yeah.jpg'
  export default {
-  mounted(){
-    let token=localStorage.getItem('token');
-    if(token==='admin'){
-      this.isAdmin=true;
-    }else{
-      this.isAdmin=false;
-    }
-  },
-   name: 'Aside',
    props: {
      asideWidth: String,
      isCollapse: Boolean
    },
    data(){
     return{
-      isAdmin:false,
+      isAdmin:this.$store.state.isAdmin,
       tafei:src,
     }
    }

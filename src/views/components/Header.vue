@@ -6,7 +6,8 @@
           class="mr-3"
           src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
         />
-        <span class="text-large font-600 mr-3"> 尊敬的{{username}}用户,你好 </span>
+        <span class="text-large font-600 mr-3" v-if=isAdmin> 尊敬的管理员用户,您好 </span>
+        <span class="text-large font-600 mr-3" v-if=!isAdmin> 尊敬的{{username}}用户,您好 </span>
 
           <div style="flex: 1; display: flex; justify-content: flex-end; align-items: center">
               <div style="display: flex; align-items: center; cursor: pointer">
@@ -22,17 +23,21 @@
 <script>
 export default {
   async mounted(){
-    let token=localStorage.getItem('token')
-    let res={
-          Token:token
+    if(!this.isAdmin){
+      let token=localStorage.getItem('token')
+      let res={
+            Token:token
+        }
+      await this.$api.parse_token(res).then((params)=>{
+        this.username=params.data.claims.username
       }
-    await this.$api.parse_token(res).then((params)=>{
-      this.username=params.data.claims.username
+      )
     }
-    )
+    
   },
   data(){
     return{
+      isAdmin:this.$store.state.isAdmin,
       username:''
     }
   },

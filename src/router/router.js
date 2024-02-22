@@ -18,6 +18,13 @@ const routes = [
       },
       children:[
         {
+          path: '/userinfo',
+          component: () => import('@/views/components/Userinfo.vue'),
+          meta: {
+             requiresAuth: true 
+            }
+        },
+        {
           path: '/gpuinfo',
           component: () => import('@/views/components/gpuinfo.vue'),
           meta: {

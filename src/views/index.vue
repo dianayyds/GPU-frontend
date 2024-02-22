@@ -314,20 +314,14 @@
 
 			async handleSignin() {
 			// 这里处理登录逻辑
-
 			if(this.username===""){
-				localStorage.setItem('jwttoken', "")
-				// this.$alert.put("用户名不能为空")
 				this.$message({
 				type: 'error',
 				message: '用户名不能为空',
 			})
-				
 				return
 			}
 			if(this.password===""){
-				localStorage.setItem('jwttoken', "")
-				// this.$alert.put("密码不能为空")
 				this.$message({
 				type: 'error',
 				message: '密码不能为空',
@@ -336,10 +330,11 @@
 			}
 			if(this.username==="admin" && this.password==="admin"){
 				localStorage.setItem('token', "admin")
+				this.$store.state.isAdmin=true;
 				this.$router.push('/layout')
 				return
 			}
-
+			this.$store.state.isAdmin=false;
 			//将请求转为对象
 			let res = {
 			Username: this.username, // 假设 this.username 是你从输入字段绑定的数据
@@ -348,19 +343,14 @@
 			//调用api接口
 			await this.$api.sign_in(res).then((param)=>{
 			if (param.data.code === 0) {
-    			// alert("注册成功")
-				// this.$alert.put("登录成功")
 				this.$message({
 				type: 'success',
 				message: '登录成功',
 			})
 				localStorage.setItem('token', param.data.token)
-				// console.log(localStorage.getItem('token'))
 				this.$router.push('/layout')
   			}
 			else{
-				localStorage.setItem('jwttoken', "")
-				// this.$alert.put("密码错误")
 				this.$message({
 				type: 'error',
 				message: '密码错误',
