@@ -336,7 +336,7 @@
 			}
 			if(this.username==="admin" && this.password==="admin"){
 				localStorage.setItem('token', "admin")
-				this.$router.push('/administrator')
+				this.$router.push('/layout')
 				return
 			}
 

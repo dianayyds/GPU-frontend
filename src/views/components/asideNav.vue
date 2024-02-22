@@ -8,20 +8,26 @@
          <el-menu router :collapse="isCollapse" :collapse-transition="false" background-color="#001529"
                   active-text-color="#fff" text-color="rgba(255, 255, 255, 0.65)" 
                   style="border: none">
+          <div v-if=!isAdmin>
           <el-menu-item index="/initdatabase">
             <el-icon><InfoFilled /></el-icon>
              <span>初始化数据库</span>
            </el-menu-item>
+          </div>
 
+          <div v-if=!isAdmin>
            <el-menu-item index="/cpuinfo">
             <el-icon><InfoFilled /></el-icon>
              <span>CPU信息</span>
            </el-menu-item>
+          </div>
 
+          <div v-if=isAdmin>
            <el-menu-item index="/gpuinfo">
             <el-icon><location /></el-icon>
              <span>GPU信息</span>
            </el-menu-item>
+          </div>
 
          </el-menu>
        </el-aside>
@@ -30,6 +36,14 @@
  <script>
 import src from '@/assets/tafei_yeah.jpg'
  export default {
+  mounted(){
+    let token=localStorage.getItem('token');
+    if(token==='admin'){
+      this.isAdmin=true;
+    }else{
+      this.isAdmin=false;
+    }
+  },
    name: 'Aside',
    props: {
      asideWidth: String,
@@ -37,7 +51,8 @@ import src from '@/assets/tafei_yeah.jpg'
    },
    data(){
     return{
-      tafei:src
+      isAdmin:false,
+      tafei:src,
     }
    }
 

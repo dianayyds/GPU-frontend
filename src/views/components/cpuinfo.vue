@@ -1,5 +1,6 @@
 <template>
-<!-- <div><button @click="StartMonitor">开始监测</button></div> -->
+<div><button @click="StartMonitor">开始监测</button></div>
+<div><button @click="StopMonitor">停止监测</button></div>
 <div class="chart" id="cpuinfo" style="width: 600px;height:400px;margin-bottom: 20px;"></div>
 </template>
   
@@ -7,21 +8,24 @@
   import * as echarts from 'echarts';
   import { markRaw } from 'vue';
   export default {
-    mounted(){
-      //开始即运行
-      this.chart = markRaw(echarts.init(document.getElementById('cpuinfo')));
-      setInterval(this.fetchData, 2000);
-    },
+    // mounted(){
+    //   updateChart()
+    // },
     data(){
       return{
         chart: null,
+        interval:null,
       }
     },
     methods:{
-      // async StartMonitor(){
-      //   this.chart = markRaw(echarts.init(document.getElementById('cpuinfo')));
-      //   setInterval(this.fetchData, 1000);
-      // },
+      async StartMonitor(){
+        this.chart = markRaw(echarts.init(document.getElementById('cpuinfo')));
+        this.interval = setInterval(this.fetchData, 2000);
+      },
+      async StopMonitor(){
+        this.chart = markRaw(echarts.init(document.getElementById('cpuinfo')));
+        clearInterval(this.interval);
+      },
       updateChart() {
       this.chart.setOption({
         xAxis: {

@@ -46,3 +46,11 @@ export function users_info(params){
     })
 }
 
+export function delete_user(params){
+    return request({
+        url:'/delete_user',
+        method:'post',
+        params
+    })
+}
+

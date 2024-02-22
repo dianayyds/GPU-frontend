@@ -16,7 +16,6 @@ import AsideNav from '@/views/components/AsideNav.vue';
 import Header from '@/views/components/Header.vue';
 
 export default {
-
 components: {
   AsideNav,
   Header,

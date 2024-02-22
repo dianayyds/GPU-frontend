@@ -1,5 +1,6 @@
 
 import { createStore } from 'vuex'
+import mutations from './mutations';
 
 const store = createStore({
     state () {
@@ -10,12 +11,7 @@ const store = createStore({
         cpuydata:[],
       }
     },
-    mutations:{
-      Pushcpuinfo(state,payload){
-        state.cpuydata.push(payload.usage);
-        state.cpuxdata.push(payload.timestamp);
-      }
-    }
+    mutations,
   })
 
 export default store

@@ -7,10 +7,6 @@ const routes = [
     component: () => import('@/views/components/NotFound.vue'),
   },
   {
-    path: '/administrator',
-    component:() => import('@/views/administrator.vue'),
-  },
-  {
     path: '/',
     component: () => import('@/views/index.vue'),
   },
@@ -21,13 +17,6 @@ const routes = [
        requiresAuth: true 
       },
       children:[
-        {
-          path: '/layout',
-          component: () => import('@/views/components/initdatabase.vue'),
-          meta: {
-             requiresAuth: true 
-            }
-        },
         {
           path: '/gpuinfo',
           component: () => import('@/views/components/gpuinfo.vue'),
@@ -67,12 +56,16 @@ router.beforeEach((to, from, next) => {
     // 获取token
     const token = localStorage.getItem('token');
     if (!token) { // token不存在，则跳转到登录页
-      ElMessage({
+      this.$message({
+        type: 'error',
         message: '请先登录',
-        type: 'error'
       })
       next('/');
     } else { // token存在，验证是否过期
+      if(token==='admin'){
+        next();
+        return
+      }
       let res={
           Token:token
       }
@@ -82,6 +75,10 @@ router.beforeEach((to, from, next) => {
               next();
           }
           else{
+            this.$message({
+              type: 'error',
+              message: '密钥已经过期',
+            })
           }
       })
     }
