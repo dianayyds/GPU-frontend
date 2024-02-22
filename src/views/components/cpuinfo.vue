@@ -1,6 +1,7 @@
 <template>
-<div><button @click="StartMonitor">开始监测</button></div>
-<div><button @click="StopMonitor">停止监测</button></div>
+  <el-button link type="success" @click="StartMonitor"><el-icon><Open /></el-icon>开始监测</el-button>
+  <el-button link type="danger" @click="StopMonitor"><el-icon><TurnOff /></el-icon>停止监测</el-button>
+
 <div class="chart" id="cpuinfo" style="width: 600px;height:400px;margin-bottom: 20px;"></div>
 </template>
   

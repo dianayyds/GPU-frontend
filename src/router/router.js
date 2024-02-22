@@ -19,7 +19,7 @@ const routes = [
       children:[
         {
           path: '/userinfo',
-          component: () => import('@/views/components/Userinfo.vue'),
+          component: () => import('@/views/components/userinfo.vue'),
           meta: {
              requiresAuth: true 
             }
