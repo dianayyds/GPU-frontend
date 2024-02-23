@@ -25,7 +25,6 @@
 
     <div v-else class="db-initialized">
       <div class="box1">您已经初始化了数据库,该数据库为<el-icon><Box /></el-icon>{{dbInfo.DatabaseName }}</div>
-
       <el-button @click="resetInitialization">重新设置点击这里</el-button>
     </div>
 </template>
@@ -48,9 +47,11 @@
         {
           this.isDatabaseInitialized=false;
         }else{
-          this.isDatabaseInitialized=true;
+          this.dbInfo.DatabaseName=params.data.user.DatabaseName;
           this.$api.init_database(params.data.user).then((params)=>{
           if(params.data.code==0){
+            this.isDatabaseInitialized=true;
+            console.log(params.data.user)
             this.$message({
               message: '数据库初始化成功',
               type: 'success'

@@ -1,7 +1,6 @@
 <template>
   <el-button link type="success" @click="StartMonitor"><el-icon><Open /></el-icon>开始监测</el-button>
   <el-button link type="danger" @click="StopMonitor"><el-icon><TurnOff /></el-icon>停止监测</el-button>
-
 <div class="chart" id="cpuinfo" style="width: 600px;height:400px;margin-bottom: 20px;"></div>
 </template>
   
@@ -27,6 +26,15 @@
       },
       updateChart() {
       this.chart.setOption({
+        title:{
+          text:'CPU使用率',
+          left: "center",
+          // top: "center",
+          textStyle: {
+          fontSize: 30
+          },
+
+        },
         xAxis: {
           type: 'category',
           data: this.$store.state.cpuxdata,
@@ -35,7 +43,7 @@
           type: 'value'
         },
         series: [{
-          name:"CPU使用率",
+          showSymbol: false,
           data: this.$store.state.cpuydata,
           type: 'line'
         }],
