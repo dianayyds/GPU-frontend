@@ -36,7 +36,7 @@ export default{
         chartTitle: 'CPU利用率',
         xAxisData: [],
         seriesData: [
-          { name: '系统占比', type: 'line', values: [] },
+          { name: '系统占比', type: 'line', data: [] },
         ],
         xAxisName: '时间轴', 
         yAxisName: '%', // 设置 yAxisName 的值
@@ -58,6 +58,7 @@ export default{
     },
     async fetchData(){
       await this.$api.cpu_info().then((params)=>{
+        //用户空间使用、系统空间使用和CPU空闲的值,params.data.userUsage|systemUsage|idle
         if(params.data.code!=0){
           this.$message({
             message: params.data.msg,
@@ -65,20 +66,29 @@ export default{
           });
           return
         }
+        // payload的结构是：
+        // {
+        //   userUsage: 用户空间使用率,
+        //   systemUsage: 系统空间使用率,
+        //   idleUsage: CPU空闲率,
+        //   timestamp: 当前时间戳
+        // }
         let payload={
-          usage:params.data.cpuUsage,
+          userUsage:params.data.userUsage,
+          systemUsage:params.data.systemUsage,
+          idleUsage:params.data.idleUsage,
           timestamp:new Date().toLocaleTimeString(),
         }
         this.$store.commit('Pushcpuinfo',payload);
-        // console.log(this.$store.state.cpuxdata,this.$store.state.cpuydata);
         let tmpgpuinfo = 
             {
               chartTitle: 'CPU利用率(%)',
               xAxisData: this.$store.state.cpuxdata,
               seriesData: [
-                              { name: '用户程序占CPU百分比', type: 'line', values: this.$store.state.cpuydata },
-                              // { name: '系统程序占CPU百分比', type: 'line', values: tmp.YDatas[1].Values },
-                          ],
+              { name: '用户程序占CPU百分比', type: 'line', data: this.$store.state.userUsages },
+              { name: '系统程序占CPU百分比', type: 'line', data: this.$store.state.systemUsages },
+              { name: 'CPU空闲率', type: 'line', data: this.$store.state.idleUsages },
+            ],
               yAxisName: '%', // 设置 yAxisName 的值
             };
             this.chart1 = tmpgpuinfo;
@@ -86,15 +96,16 @@ export default{
       })
     },
     initial_chart(){
-    const xData = [new Date().toLocaleTimeString()];
-    const yData = [0];
+    const xData = [];
+    const yData = [];
     this.chart1 = 
       {
         chartTitle: 'CPU利用率(%)',
         xAxisData: xData,
         seriesData: [
-          { name: 'CPU使用率', type: 'line', values: yData },
-          // { name: '系统程序占CPU百分比', type: 'line', values: yData },
+        { name: '用户程序占CPU百分比', type: 'line', data: yData },
+        { name: '系统程序占CPU百分比', type: 'line', data: yData },
+        { name: 'CPU空闲率', type: 'line', data: yData },
         ],
         xAxisName: '时间轴', 
         yAxisName: '%', // 设置 yAxisName 的值

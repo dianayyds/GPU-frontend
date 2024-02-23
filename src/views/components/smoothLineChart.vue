@@ -51,6 +51,11 @@
             trigger: 'axis',
             show: true,
           },
+          legend: {
+          data: newOptions.seriesData.map(item => item.name),
+          top: 'top',
+          triggerEvent: true
+        },
           //图例
           xAxis: {
             type: 'category',
@@ -86,12 +91,12 @@
             }
           },
         series: newOptions.seriesData.map(item => ({
+            //...是展开运算符,将对象item中的所有属性展开，然后加上了一个smooth属性
           ...item,
           smooth: true,
-          data : item.values
         })),
         };
-        this.chart.setOption(option);
+        this.chart.setOption(option,false);
       },
     }
   };

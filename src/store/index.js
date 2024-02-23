@@ -8,7 +8,9 @@ const store = createStore({
         isDatabaseInitialized:true,
         DatabaseName:'',
         cpuxdata:[],
-        cpuydata:[],
+        userUsages:[],
+        systemUsages:[],
+        idleUsages:[],
         isAdmin:false,
       }
     },
