@@ -1,6 +1,6 @@
 <!-- Header.vue -->
 <template>
-  <el-header background-color="#001529" style="height: 60px; display: flex; align-items: center; box-shadow: 2px 0 6px rgba(0, 21, 41, .35);">
+  <el-header>
           <el-avatar
           :size="32"
           class="mr-3"
@@ -45,8 +45,6 @@ export default {
   methods:{
     log_out(){
       localStorage.removeItem('token')
-      localStorage.removeItem('isDatabaseInitialized')
-      localStorage.removeItem('DatabaseName')
       this.$router.push('/')
     }
 
@@ -55,5 +53,12 @@ export default {
 </script>
  
 <style>
- 
+ .el-header{
+  position: relative;
+  background-color: var(--el-color-primary-light-7);
+  color: var(--el-text-color-primary);
+  display: flex; 
+  align-items: center; 
+  box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
+ }
 </style>
