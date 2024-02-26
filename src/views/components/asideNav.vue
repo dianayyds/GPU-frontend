@@ -3,7 +3,7 @@
   <el-aside :width="asideWidth">   
          <div style="height: 70px; line-height: 60px; font-size: 20px; display: flex; align-items: center; justify-content: center">
            <el-avatar :size="50" :src="tafei"/>
-           <span class="logo-title" v-show="!isCollapse">战斗爽系统</span>
+           <span class="logo-title">ycx's work</span>
          </div>
          <el-menu router :collapse="isCollapse" :collapse-transition="false" background-color="#001529"
                   active-text-color="#fff" text-color="rgba(255, 255, 255, 0.65)" 
@@ -47,7 +47,6 @@ import src from '@/assets/tafei_yeah.jpg'
  export default {
    props: {
      asideWidth: String,
-     isCollapse: Boolean
    },
    data(){
     return{

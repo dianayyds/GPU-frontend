@@ -62,3 +62,13 @@ export function user_info_byname(params){
         params
     })
 }
+
+export function base_info(params){
+    return request({
+        url:'/base_info',
+        method:'get',
+        params
+    })
+}
+
+

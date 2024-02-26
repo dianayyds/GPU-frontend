@@ -1,7 +1,7 @@
 <!-- 左右结构，左边是菜单栏、右边是一个大盒子分为通用顶部（上）和变换的主体（下） -->
 <template>
   <el-container>
-    <AsideNav :asideWidth="asideWidth" :isCollapse="isCollapse" />
+    <AsideNav :asideWidth="asideWidth" />
     <div style="width: 100%;flex-wrap: wrap;">
     <Header />
       <el-main>
@@ -23,7 +23,6 @@ components: {
 data() {
   return {
     username:"",
-    isCollapse: false,   //展开
     asideWidth: '200px',   //侧边栏默认值为200
   };
 },

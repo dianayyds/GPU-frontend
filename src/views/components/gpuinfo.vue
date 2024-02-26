@@ -1,4 +1,14 @@
 <template>
+  <div>
+    <el-table :data="baseinfo" style="width: 100%">
+      <el-table-column prop="operatingSystem" label="操作系统" width="180"></el-table-column>
+      <el-table-column prop="hostname" label="主机名" width="180"></el-table-column>
+      <el-table-column prop="kernelVersion" label="内核版本" width="180"></el-table-column>
+      <el-table-column prop="cpuArchitecture" label="CPU架构" width="180"></el-table-column>
+      <el-table-column prop="distributorID" label="发行版ID" width="180"></el-table-column>
+      <el-table-column prop="release" label="发行版版本" width="180"></el-table-column>
+    </el-table>
+  </div>
   <div class="flex-container">
     
     <div class="chart_cpu_usage">
@@ -32,6 +42,14 @@ export default{
   },
   data(){
     return{
+      baseinfo: [{
+        operatingSystem: 'Ubuntu',
+        hostname: 'ubuntu-server',
+        kernelVersion: '5.4.0-26-generic',
+        cpuArchitecture: 'x86_64',
+        distributorID: 'Ubuntu',
+        release: '20.04'
+      }],
       chart1: {
         chartTitle: 'CPU利用率',
         xAxisData: [],
@@ -47,9 +65,16 @@ export default{
     }
   },
   async mounted(){
+    await this.Getbaseinfo();
     await this.initial_chart();
   },
   methods:{
+    async Getbaseinfo(){
+      await this.$api.base_info().then((params)=>{
+        this.baseinfo[0]=params.data;
+      })
+
+    },
     async StartMonitor(){
       this.interval = setInterval(this.fetchData, 2000);
     },
@@ -96,24 +121,42 @@ export default{
       })
     },
     initial_chart(){
-    const xData = [];
-    const yData = [];
-    this.chart1 = 
-      {
-        chartTitle: 'CPU利用率(%)',
-        xAxisData: xData,
-        seriesData: [
-        { name: '用户程序占CPU百分比', type: 'line', data: yData },
-        { name: '系统程序占CPU百分比', type: 'line', data: yData },
-        { name: 'CPU空闲率', type: 'line', data: yData },
-        ],
-        xAxisName: '时间轴', 
-        yAxisName: '%', // 设置 yAxisName 的值
-        yAxis_min: 0,
-        yAxis_max: 100,
-        yAxis_interval: 20
-      },
-      this.$refs.chartcomponent1.updateData(this.chart1);
+    if(this.$store.state.userUsages.length===0)
+    {
+      const xData = [];
+      const yData = [];
+      this.chart1 = 
+        {
+          chartTitle: 'CPU利用率(%)',
+          xAxisData: xData,
+          seriesData: [
+          { name: '用户程序占CPU百分比', type: 'line', data: yData },
+          { name: '系统程序占CPU百分比', type: 'line', data: yData },
+          { name: 'CPU空闲率', type: 'line', data: yData },
+          ],
+          xAxisName: '时间轴', 
+          yAxisName: '%', // 设置 yAxisName 的值
+          yAxis_min: 0,
+          yAxis_max: 100,
+          yAxis_interval: 20
+        },
+        this.$refs.chartcomponent1.updateData(this.chart1);
+    }
+    else{
+      let tmpgpuinfo = 
+          {
+            chartTitle: 'CPU利用率(%)',
+            xAxisData: this.$store.state.cpuxdata,
+            seriesData: [
+            { name: '用户程序占CPU百分比', type: 'line', data: this.$store.state.userUsages },
+            { name: '系统程序占CPU百分比', type: 'line', data: this.$store.state.systemUsages },
+            { name: 'CPU空闲率', type: 'line', data: this.$store.state.idleUsages },
+          ],
+            yAxisName: '%', // 设置 yAxisName 的值
+          };
+      this.chart1 = tmpgpuinfo;
+      this.$refs.chartcomponent1.updateData(this.chart1); 
+    }
     }
   }
 }

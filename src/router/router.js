@@ -63,7 +63,7 @@ router.beforeEach((to, from, next) => {
     // 获取token
     const token = localStorage.getItem('token');
     if (!token) { // token不存在，则跳转到登录页
-      this.$message({
+      ElMessage({
         type: 'error',
         message: '请先登录',
       })
@@ -82,7 +82,7 @@ router.beforeEach((to, from, next) => {
               next();
           }
           else{
-            this.$message({
+            ElMessage({
               type: 'error',
               message: '密钥已经过期',
             })

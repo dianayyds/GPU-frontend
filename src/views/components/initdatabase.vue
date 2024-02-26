@@ -1,6 +1,6 @@
 <template>
-    <div v-if="!isDatabaseInitialized" >
-      <el-form ref="dbForm" :model="dbInfo" label-width="120px">
+    <div v-if="!isDatabaseInitialized" @keyup.enter="submitForm" tabindex="0">
+      <el-form ref="dbForm" :model="dbInfo" label-width="120px" >
         <el-form-item label="IP 地址">
           <el-input v-model="dbInfo.Ip" placeholder="请输入数据库IP地址"></el-input>
         </el-form-item>

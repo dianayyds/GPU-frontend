@@ -194,13 +194,13 @@
 	<div class="center">
 		<div class="logon">
 			<div :class="overlaylong">
-				<div class="overlaylong-Signin" v-if="disfiex == 0">
+				<div class="overlaylong-Signin" v-if="disfiex == 0" @keyup.enter="handleSignin" tabindex="0">
 					<h2 class="overlaylongH2">登录</h2>
 					<input type="text" placeholder="请输入用户名" v-model="username" >
 					<input type="password" placeholder="请输入密码" v-model="password">
 					<button  class="inupbutton" @click="handleSignin">登录</button>
 				</div>
-				<div class="overlaylong-Signup" v-if="disfiex == 1">
+				<div class="overlaylong-Signup" v-if="disfiex == 1" @keyup.enter="handleSignup">
 					<h2 class="overlaylongH2">注册</h2>
 					<input type="text" placeholder="请输入用户名" v-model="username" >
 					<input type="password" placeholder="请输入密码" v-model="password">
