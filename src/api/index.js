@@ -72,3 +72,11 @@ export function base_info(params){
 }
 
 
+export function gpu_info(params){
+    return request({
+        url:'/gpu_info',
+        method:'get',
+        params
+    })
+}
+

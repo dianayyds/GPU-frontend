@@ -12,6 +12,10 @@ const store = createStore({
         systemUsages:[],
         idleUsages:[],
         isAdmin:false,
+        gpuxdata:[],
+        powerDraws:{},
+        utilizations:{},
+        temperatures:{},
       }
     },
     mutations,

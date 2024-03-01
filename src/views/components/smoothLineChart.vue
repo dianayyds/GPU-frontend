@@ -19,22 +19,12 @@
   
   export default {
     name: 'SmoothLineChart',
-    props: {
-      chartTitle: String,
-      xAxisData: Array,
-      seriesData: Array,
-      xAxisName: String,
-      yAxisName: String,
-      yAxis_min: echarts.number,
-      yAxis_max: echarts.number,
-      yAxis_interval: echarts.number,
-    },
     data () {
       return {
         startIndex : null,
         endIndex : null,
         chart: null,
-        chartTitle: this.chartTitle // 定义 chartTitle 数据属性并将其初始值设置为 title prop 的值
+        chartTitle :String,
       };
     },
     mounted () {
@@ -43,8 +33,8 @@
     },
     methods: {
       updateData (newOptions) {
-        this.chartTitle = newOptions.chartTitle; 
         // 根据数据数量确定x轴上显示的点数
+        this.chartTitle = newOptions.chartTitle;
         let xAxisData = newOptions.xAxisData;
         const option = {
           tooltip: {

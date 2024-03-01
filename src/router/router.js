@@ -78,14 +78,23 @@ router.beforeEach((to, from, next) => {
       }
       api.parse_token(res).then((param)=>{
           let now = parseInt(new Date().getTime() / 1000) + '';
-          if(now<param.data.claims.exp){
+          if(param.data.code===1)
+          {
+            ElMessage({
+              type: 'error',
+              message: '密钥已经过期,请重新登录',
+            })
+            next('/');
+          }
+          else if(now<param.data.claims.exp){
               next();
           }
           else{
             ElMessage({
               type: 'error',
-              message: '密钥已经过期',
+              message: '密钥不合法',
             })
+            next('/');
           }
       })
     }

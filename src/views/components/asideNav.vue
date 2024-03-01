@@ -9,7 +9,7 @@ Aside.vue
          <div class="gradient-line"></div>
 
          <el-menu router 
-         background-color="#697d90"
+         background-color="#6d9cc2"
          active-text-color="#fff" 
          text-color="rgba(255, 255, 255, 0.65)" >
 
@@ -41,7 +41,7 @@ Aside.vue
            </el-menu-item>
           </div>
          </el-menu>
-       </el-aside>
+  </el-aside>
  </template>
   
  <script>
@@ -69,7 +69,7 @@ import src from '@/assets/tafei_yeah.jpg'
 }
  /* 菜单栏选中的背景颜色 */
  .el-menu-item.is-active {
-   background-color: rgb(65, 100, 146) ;
+   background-color: rgb(55, 84, 123) ;
  }
  /* 菜单栏鼠标悬停在二级标题的颜色 */
  .el-menu-item:hover {
@@ -82,7 +82,7 @@ import src from '@/assets/tafei_yeah.jpg'
  /* 菜单栏整体的美观样式 */
  .el-aside {
    box-shadow: 5px 0 6px rgba(15, 14, 14, 0.35); /* 菜单栏右侧阴影  0  阴影扩散范围 阴影的颜色 */
-   background-color: #697d90;   /* 菜单栏整体的背景色 */
+   background-color: #6d9cc2;   /* 菜单栏整体的背景色 */
    min-height: 100vh;  /* 菜单栏整体高度 */
  }  
  /*菜单栏logo图标和文字的距离*/

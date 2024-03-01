@@ -51,7 +51,6 @@
           this.$api.init_database(params.data.user).then((params)=>{
           if(params.data.code==0){
             this.isDatabaseInitialized=true;
-            console.log(params.data.user)
             this.$message({
               message: '数据库初始化成功',
               type: 'success'
