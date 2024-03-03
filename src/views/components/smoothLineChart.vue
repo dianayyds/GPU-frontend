@@ -1,15 +1,13 @@
 <template>
-    <div>
       <div class="chart-title">
         <span class="chart-title-icon">
         </span>
         <span style="width:70%">
           {{ chartTitle }}
         </span>
-        <slot></slot>
       </div>  
+
       <div ref="chart" style="width: 100%; height: 400px;"></div>
-    </div>
   </template>
   
   <script >
@@ -114,7 +112,7 @@
     align-items: center;
     width: 100%;
     height: 19px;
-    font-size: 20px;
+    font-size: 15px;
     font-family: Noto Sans-Regular, Noto Sans;
     font-weight: 400;
     color: #333333;

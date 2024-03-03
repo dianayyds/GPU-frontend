@@ -1,13 +1,11 @@
 Aside.vue
 <template>
-  <el-aside :width="asideWidth">   
+  <el-aside >   
          <div style="height: 80px; font-size: 21px; display: flex; align-items: center; justify-content: center">
-           <el-avatar :size="50" :src="tafei"/>
+           <el-avatar :size="60" :src="bjtu"/>
            <span class="title">ycx's work</span>
          </div>
-
          <div class="gradient-line"></div>
-
          <el-menu router 
          background-color="#6d9cc2"
          active-text-color="#fff" 
@@ -45,7 +43,7 @@ Aside.vue
  </template>
   
  <script>
-import src from '@/assets/tafei_yeah.jpg'
+import src from '@/assets/bjtu.jpg'
  export default {
    props: {
      asideWidth: String,
@@ -53,7 +51,7 @@ import src from '@/assets/tafei_yeah.jpg'
    data(){
     return{
       isAdmin:this.$store.state.isAdmin,
-      tafei:src,
+      bjtu:src,
     }
    }
 
@@ -62,6 +60,9 @@ import src from '@/assets/tafei_yeah.jpg'
   
   
  <style>
+ .el-menu{
+  
+ }
  .gradient-line {
   height: 2px; /* 分界线的高度 */
   background: linear-gradient(to right, rgba(255,255,255,0), rgba(0,0,0,0.75), rgba(255,255,255,0)); /* 渐变效果 */
@@ -81,9 +82,14 @@ import src from '@/assets/tafei_yeah.jpg'
  }
  /* 菜单栏整体的美观样式 */
  .el-aside {
-   box-shadow: 5px 0 6px rgba(15, 14, 14, 0.35); /* 菜单栏右侧阴影  0  阴影扩散范围 阴影的颜色 */
-   background-color: #6d9cc2;   /* 菜单栏整体的背景色 */
-   min-height: 100vh;  /* 菜单栏整体高度 */
+  width:200px;
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 5px;
+  bottom: 0;
+  box-shadow: 5px 0 6px rgba(15, 14, 14, 0.35); /* 菜单栏右侧阴影  0  阴影扩散范围 阴影的颜色 */
+  background-color: #6d9cc2;   /* 菜单栏整体的背景色 */
  }  
  /*菜单栏logo图标和文字的距离*/
  .title {

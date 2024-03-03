@@ -1,6 +1,27 @@
 <template>
+
+<div class="mybutton">
+
+<el-button size="medium"  type="success" @click="StartMonitor"><el-icon><Open /></el-icon>开始监测</el-button>
+<el-button size="medium" type="danger" @click="StopMonitor"><el-icon><TurnOff /></el-icon>停止监测</el-button>
+
+</div>
+<div class="nav-container">
+<el-select 
+    @change="scrollTo"
+    filterable
+    placeholder="快速前往"
+    size="medium"
+   >
+      <el-option
+        v-for="item in selectoptions"
+        :label="item.label"
+        :value="item.value"
+      />
+  </el-select>
+</div>
   <div>
-    <el-table :data="baseinfo" style="width: 100%">
+    <el-table :data="baseinfo" style="width: 100%" id="base_info">
       <el-table-column prop="operatingSystem" label="操作系统" width="180"></el-table-column>
       <el-table-column prop="hostname" label="主机名" width="180"></el-table-column>
       <el-table-column prop="kernelVersion" label="内核版本" width="180"></el-table-column>
@@ -11,14 +32,13 @@
   </div>
   <div class="flex-container">
     
-    <div class="chart_cpu_usage">
-        <smoothLineChart class="chart"
+    <div class="chart_cpu_usage" id="chart1">
+        <smoothLineChart 
                          ref="chartcomponent1"
                           />
       </div>
   </div>
-  <el-button link type="success" @click="StartMonitor"><el-icon><Open /></el-icon>开始监测</el-button>
-  <el-button link type="danger" @click="StopMonitor"><el-icon><TurnOff /></el-icon>停止监测</el-button>
+  
 </template>
 
 <script>
@@ -33,6 +53,22 @@ export default{
       }],
       chart1: {
       },
+      selectoptions:[
+      {
+        value: 'base_info',
+        label: '服务器信息',
+      },
+      {
+        value: 'chart1',
+        label: 'CPU使用率',
+      },
+      {
+        value: 'table',
+        label: '统计数据',
+      },
+
+
+      ],
     }
   },
   async mounted(){
@@ -112,11 +148,34 @@ export default{
         this.$refs.chartcomponent1.updateData(this.chart1); 
 
     },
+    scrollTo(id){
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    
+    }
   }
 }
 </script>
 
 <style>
+.mybutton{
+    top:0;
+    width:40%;
+  }
+  .el-select{
+    border-color: #409EFF;
+    width: 200px;
+    height:40px;
+  }
+  .nav-container{
+    width: 100px;
+    position: fixed;
+    top:90px;
+    right:150px;
+    z-index: 1000;
+  }
 
   .flex-container {
     display: flex;
@@ -127,8 +186,6 @@ export default{
     padding:0 15px 15px 15px;
   }
   .chart_cpu_usage {
-    width: 100%;
-    height: 432px;
     background: #fafbfd;
     border-radius: 6px 6px 6px 6px;
     opacity: 1;

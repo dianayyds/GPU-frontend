@@ -45,6 +45,7 @@ export default {
   methods:{
     log_out(){
       localStorage.removeItem('token')
+      this.$store.commit('ResetStore')
       this.$router.push('/')
     }
 
@@ -54,11 +55,14 @@ export default {
  
 <style>
  .el-header{
+  left: 200px;
   position: relative;
   background-color: var(--el-color-primary-light-7);
   color: var(--el-text-color-primary);
   display: flex; 
   align-items: center; 
   box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
+  height: 60px; 
+  width:85.5%;
  }
 </style>

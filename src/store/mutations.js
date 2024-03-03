@@ -36,4 +36,20 @@ export default{
     }
     state.gpuxdata.push(new Date().toLocaleTimeString());
     },
+    ResetStore(state){
+        const initialState={
+            isDatabaseInitialized:true,
+            DatabaseName:'',
+            cpuxdata:[],
+            userUsages:[],
+            systemUsages:[],
+            idleUsages:[],
+            isAdmin:false,
+            gpuxdata:[],
+            powerDraws:{},
+            utilizations:{},
+            temperatures:{},
+        };
+        Object.assign(state, initialState);
+    },
 }

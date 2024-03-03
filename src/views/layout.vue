@@ -1,13 +1,11 @@
 <!-- 左右结构，左边是菜单栏、右边是一个大盒子分为通用顶部（上）和变换的主体（下） -->
 <template>
   <el-container>
-    <AsideNav :asideWidth="asideWidth" />
-    <div style="width: 100%;flex-wrap: wrap;">
+    <AsideNav />
     <Header />
       <el-main>
         <router-view />  <!-- 表示当前页面的子路由会在<router-view />里面展示      -->
       </el-main>
-    </div>
   </el-container>
 </template>
 
@@ -23,9 +21,18 @@ components: {
 data() {
   return {
     username:"",
-    asideWidth: '200px',   //侧边栏默认值为200
   };
 },
 
 };
 </script>
+
+<style>
+.el-main{
+  position: absolute;
+  left: 200px;
+  right: 0;
+  top: 70px;
+  bottom: 0;
+}
+</style>
