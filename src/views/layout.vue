@@ -4,7 +4,7 @@
     <AsideNav />
     <Header />
       <el-main>
-        <router-view />  <!-- 表示当前页面的子路由会在<router-view />里面展示      -->
+        <router-view></router-view>
       </el-main>
   </el-container>
 </template>

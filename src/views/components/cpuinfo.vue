@@ -1,17 +1,15 @@
 <template>
 
 <div class="mybutton">
-
-<el-button size="medium"  type="success" @click="StartMonitor"><el-icon><Open /></el-icon>开始监测</el-button>
-<el-button size="medium" type="danger" @click="StopMonitor"><el-icon><TurnOff /></el-icon>停止监测</el-button>
-
+<el-button size="default"  type="success" @click="StartMonitor"><el-icon><Open /></el-icon>开始监测</el-button>
+<el-button size="default" type="danger" @click="StopMonitor"><el-icon><TurnOff /></el-icon>停止监测</el-button>
 </div>
 <div class="nav-container">
 <el-select 
     @change="scrollTo"
     filterable
     placeholder="快速前往"
-    size="medium"
+    size="default"
    >
       <el-option
         v-for="item in selectoptions"
@@ -53,6 +51,7 @@ export default{
       }],
       chart1: {
       },
+      interval1:null,
       selectoptions:[
       {
         value: 'base_info',
@@ -71,9 +70,17 @@ export default{
       ],
     }
   },
+  beforeUnmount() {
+    clearInterval(this.interval1);
+    this.interval1=null;
+  },
   async mounted(){
     await this.Getbaseinfo();
     this.initial_chart();
+    if(this.$store.state.ismonitoring===true)
+    this.StartMonitor();
+    else
+    this.StopMonitor();
   },
   methods:{
     async Getbaseinfo(){
@@ -83,12 +90,26 @@ export default{
 
     },
     async StartMonitor(){
-      this.interval = setInterval(this.fetchData, 2000);
+      this.$store.state.ismonitoring=true;
+      if(this.interval1===null)
+      this.interval1 = setInterval(this.fetchData, 2000);
     },
     async StopMonitor(){
-      clearInterval(this.interval);
+      this.$store.state.ismonitoring=false;
+      clearInterval(this.interval1);
+      this.interval1=null;
     },
     async fetchData(){
+      await this.$api.gpu_info().then((params)=>{
+        if(params.data.code!=0){
+          this.$message({
+            message: params.data.msg,
+            type: 'error'
+          });
+          return
+        }
+        this.$store.commit('Pushgpuinfo',params.data);
+      })
       await this.$api.cpu_info().then((params)=>{
         //用户空间使用、系统空间使用和CPU空闲的值,params.data.userUsage|systemUsage|idle
         if(params.data.code!=0){
@@ -99,8 +120,8 @@ export default{
           return
         }
         this.$store.commit('Pushcpuinfo',params.data);
-        this.updatechart1();
       })
+      this.updatechart1();
     },
     initial_chart(){
     if(this.$store.state.userUsages.length===0)

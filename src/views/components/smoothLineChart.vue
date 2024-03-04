@@ -33,7 +33,6 @@
       updateData (newOptions) {
         // 根据数据数量确定x轴上显示的点数
         this.chartTitle = newOptions.chartTitle;
-        let xAxisData = newOptions.xAxisData;
         const option = {
           tooltip: {
             trigger: 'axis',
@@ -48,40 +47,19 @@
           xAxis: {
             type: 'category',
             name: newOptions.xAxisName,
-            data: xAxisData,
-            axisTick: {
-              alignWithLabel: true,
-            }
+            data: newOptions.xAxisData,
           },
-          animation:false,
-          animationDuration:0,
-          animationEasing:'cubicInOut',
           yAxis: {
             type: 'value',
             min: newOptions.yAxis_min,
             max: newOptions.yAxis_max,
             name: newOptions.yAxisName,
             nameLocation: 'end',
-            axisLine: {
-              show: true
-            },
-            axisTick: {
-              show: true, // 显示刻度
-              interval: newOptions.yAxis_interval // 指定刻度间隔
-            },
-          },
-  
-          emphasis:{
-            label:
-            {
-              //控制曲线上是否显示数据
-              show:false
-            }
           },
         series: newOptions.seriesData.map(item => ({
             //...是展开运算符,将对象item中的所有属性展开，然后加上了一个smooth属性
           ...item,
-          smooth: true,
+          type: 'line'
         })),
         };
         this.chart.setOption(option,false);

@@ -5,6 +5,7 @@ import mutations from './mutations';
 const store = createStore({
     state () {
       return {
+        ismonitoring:false,
         isDatabaseInitialized:true,
         DatabaseName:'',
         cpuxdata:[],

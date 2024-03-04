@@ -2,8 +2,8 @@
   
     <div class="mybutton">
 
-    <el-button size="medium"  type="success" @click="StartMonitor"><el-icon><Open /></el-icon>开始监测</el-button>
-    <el-button size="medium" type="danger" @click="StopMonitor"><el-icon><TurnOff /></el-icon>停止监测</el-button>
+    <el-button size="default"  type="success" @click="StartMonitor"><el-icon><Open /></el-icon>开始监测</el-button>
+    <el-button size="default" type="danger" @click="StopMonitor"><el-icon><TurnOff /></el-icon>停止监测</el-button>
 
   </div>
   <div class="nav-container">
@@ -11,7 +11,7 @@
         @change="scrollTo"
         filterable
         placeholder="快速前往"
-        size="medium"
+        size="small"
        >
           <el-option
             v-for="item in selectoptions"
@@ -32,21 +32,42 @@
     </el-table>
   </div>
 
-
-    
+<br>
+<div>
+    监测数据:
   <div class="flex-container">
     <div class="chart_cpu_usage" id="chart1">
-          <smoothLineChart 
-                         ref="chartcomponent3"/>
-    </div>
-    <div class="chart_cpu_usage" id="chart2">
-          <smoothLineChart 
-                         ref="chartcomponent2"/>
-    </div>
-    <div class="chart_cpu_usage" id="chart3">
+      <keep-alive>
           <smoothLineChart 
                          ref="chartcomponent1"/>
+        </keep-alive>
     </div>
+    <div class="chart_cpu_usage" id="chart2">
+      <keep-alive>
+          <smoothLineChart 
+                         ref="chartcomponent2"/>
+      </keep-alive>
+    </div>
+    <div class="chart_cpu_usage" id="chart3">
+      <keep-alive>
+          <smoothLineChart 
+                         ref="chartcomponent3"/>
+                        </keep-alive>
+    </div>
+  </div>
+
+    <br>
+
+    <div>
+    统计数据:
+    <div class="chart_cpu_usage" id="chart4">
+      <keep-alive>
+          <barChart 
+                         ref="chartcomponent4"/>
+                        </keep-alive>
+    </div>
+  
+
     </div>
 
   
@@ -85,13 +106,16 @@
       <el-table-column prop="sd" label="标准差"  />
     </el-table-column>
   </el-table>
+</div>
 </template>
 
 <script>
 import smoothLineChart from './smoothLineChart.vue';
+import barChart from './barChart.vue';
 export default{
   components: {
     smoothLineChart,
+    barChart,
   },
   data(){
     return{
@@ -128,7 +152,7 @@ export default{
         label: 'GPU功率',
       },
       {
-        value: 'table',
+        value: 'chart4',
         label: '统计数据',
       },
 
@@ -142,6 +166,16 @@ export default{
     await this.Getbaseinfo();
     this.initial_chart();
     this.updatetable();
+    if(this.$store.state.ismonitoring===true)
+    this.StartMonitor();
+    else
+    this.StopMonitor();
+  },
+  beforeUnmount() {
+      clearInterval(this.interval1);
+      this.interval1=null;
+      clearInterval(this.interval2);
+      this.interval2=null;
   },
   methods:{
     async Getbaseinfo(){
@@ -149,17 +183,20 @@ export default{
         this.baseinfo[0]=params.data;
         this.baseinfo[0].pre="基本信息:"
       })
-
     },
-    async StartMonitor(){
-      this.updatetable();
-      this.fetchData();
+    StartMonitor(){
+      this.$store.state.ismonitoring=true;
+      if(this.interval1===null)
       this.interval1 = setInterval(this.fetchData, 2000);
+      if(this.interval2===null)
       this.interval2 = setInterval(this.updatetable, 10000);
     },
-    async StopMonitor(){
+    StopMonitor(){
+      this.$store.state.ismonitoring=false;
       clearInterval(this.interval1);
+      this.interval1=null;
       clearInterval(this.interval2);
+      this.interval2=null;
     },
     async fetchData(){
       await this.$api.gpu_info().then((params)=>{
@@ -171,6 +208,17 @@ export default{
           return
         }
         this.$store.commit('Pushgpuinfo',params.data);
+      })
+      await this.$api.cpu_info().then((params)=>{
+        //用户空间使用、系统空间使用和CPU空闲的值,params.data.userUsage|systemUsage|idle
+        if(params.data.code!=0){
+          this.$message({
+            message: params.data.msg,
+            type: 'error'
+          });
+          return
+        }
+        this.$store.commit('Pushcpuinfo',params.data);
       })
       this.updatechart()
     },
@@ -239,6 +287,18 @@ export default{
     else{
       this.updatechart3()
     }
+    if(this.tableData1.length===0){
+      let tmpgpuinfo = 
+            {
+              chartTitle: 'GPU温度(摄氏度)',
+              yAxisData: ['avg','max','min','var','sd'],
+              seriesData:[{name:'默认',avg:0,max:0,min:0,var:0,sd:0}],
+              xAxisName: '摄氏度', 
+              yAxisName: '指标', // 设置 yAxisName 的值
+            };
+      this.chart4 = tmpgpuinfo;
+      this.$refs.chartcomponent4.updateData(this.chart4); 
+    }
     },
     updatechart1(){
       let tmpgpuinfo = 
@@ -297,6 +357,18 @@ export default{
       this.chart3 = tmpgpuinfo;
       this.$refs.chartcomponent3.updateData(this.chart3); 
     },
+    updatechart4(){
+      let tmpgpuinfo = 
+            {
+              chartTitle: 'GPU温度(摄氏度)',
+              yAxisData: ['平均值','最大值','最小值','方差','平均差'],
+              seriesData:this.tableData1,
+              xAxisName: '摄氏度', 
+              yAxisName: '指标', // 设置 yAxisName 的值
+            };
+      this.chart4 = tmpgpuinfo;
+      this.$refs.chartcomponent4.updateData(this.chart4); 
+    },
     updatetable(){
       this.tableData1 = Object.keys(this.$store.state.temperatures).map(gpuName => {
       const temperatures = this.$store.state.temperatures[gpuName];
@@ -349,7 +421,8 @@ export default{
               sd: parseFloat(standardDeviation.toFixed(2))  // 标准差
             };
       });
-
+      this.updatechart4();
+      console.log(this.tableData1);
     },
     updatechart(){
       this.updatechart1()

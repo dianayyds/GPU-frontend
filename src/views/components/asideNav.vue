@@ -60,9 +60,6 @@ import src from '@/assets/bjtu.jpg'
   
   
  <style>
- .el-menu{
-  
- }
  .gradient-line {
   height: 2px; /* 分界线的高度 */
   background: linear-gradient(to right, rgba(255,255,255,0), rgba(0,0,0,0.75), rgba(255,255,255,0)); /* 渐变效果 */
