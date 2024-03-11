@@ -6,8 +6,7 @@ const store = createStore({
     state () {
       return {
         ismonitoring:false,
-        isDatabaseInitialized:true,
-        DatabaseName:'',
+        sshInitialized:false,
         cpuxdata:[],
         userUsages:[],
         systemUsages:[],

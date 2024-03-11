@@ -20,7 +20,7 @@ export default{
     // }
     for (let index = 0; index < payload.gpus.length; index++) {
         let gpu = payload.gpus[index];
-        let gpuKey = `GPU ${index}`;
+        let gpuKey = `GPU ${index+1}`;
         if (!state.powerDraws[gpuKey]) {
             state.powerDraws[gpuKey] = []; // 如果键不存在，则初始化为空数组
         }
@@ -38,8 +38,8 @@ export default{
     },
     ResetStore(state){
         const initialState={
-            isDatabaseInitialized:true,
-            DatabaseName:'',
+            ismonitoring:false,
+            sshInitialized:false,
             cpuxdata:[],
             userUsages:[],
             systemUsages:[],
@@ -49,7 +49,7 @@ export default{
             powerDraws:{},
             utilizations:{},
             temperatures:{},
-        };
+          };
         Object.assign(state, initialState);
     },
 }

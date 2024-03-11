@@ -1,102 +1,86 @@
 <template>
-  
+  <div v-if="isSshConnected">
     <div class="mybutton">
-
     <el-button size="default"  type="success" @click="StartMonitor"><el-icon><Open /></el-icon>开始监测</el-button>
     <el-button size="default" type="danger" @click="StopMonitor"><el-icon><TurnOff /></el-icon>停止监测</el-button>
+    </div>
 
-  </div>
-  <div class="nav-container">
-    <el-select 
-        @change="scrollTo"
-        filterable
-        placeholder="快速前往"
-        size="small"
-       >
+    <div class="gradient-divider"></div>
+    <div class="nav-container">
+      <el-select @change="scrollTo" placeholder="快速前往" size="small">
+        <el-option-group
+          v-for="group in selectoptions"
+          :label="group.label">
           <el-option
-            v-for="item in selectoptions"
+            v-for="item in group.options"
             :label="item.label"
             :value="item.value"
           />
+        </el-option-group>
+
       </el-select>
     </div>
     
-    <div>
-    <el-table :data="baseinfo" style="width: 100%" id="base_info"> 
-      <el-table-column prop="operatingSystem" label="操作系统" width="180"></el-table-column>
-      <el-table-column prop="hostname" label="主机名" width="180"></el-table-column>
-      <el-table-column prop="kernelVersion" label="内核版本" width="180"></el-table-column>
-      <el-table-column prop="cpuArchitecture" label="CPU架构" width="180"></el-table-column>
-      <el-table-column prop="release" label="发行版版本" width="180"></el-table-column>
-      <el-table-column prop="host" label="ip地址" width="180"></el-table-column>
+    <el-table :data="baseinfo" border style="width: 100%" id="base_info"> 
+      <el-table-column prop="operatingSystem" label="操作系统" ></el-table-column>
+      <el-table-column prop="hostname" label="主机名" ></el-table-column>
+      <el-table-column prop="kernelVersion" label="内核版本" ></el-table-column>
+      <el-table-column prop="cpuArchitecture" label="CPU架构" ></el-table-column>
+      <el-table-column prop="release" label="发行版版本" ></el-table-column>
+      <el-table-column prop="host" label="ip地址" ></el-table-column>
     </el-table>
-  </div>
 
-<br>
-<div>
-    监测数据:
-  <div class="flex-container">
-    <div class="chart_cpu_usage" id="chart1">
-      <keep-alive>
-          <smoothLineChart 
-                         ref="chartcomponent1"/>
-        </keep-alive>
-    </div>
-    <div class="chart_cpu_usage" id="chart2">
-      <keep-alive>
-          <smoothLineChart 
-                         ref="chartcomponent2"/>
-      </keep-alive>
-    </div>
-    <div class="chart_cpu_usage" id="chart3">
-      <keep-alive>
-          <smoothLineChart 
-                         ref="chartcomponent3"/>
-                        </keep-alive>
-    </div>
-  </div>
 
-    <br>
+    <div class="gradient-divider"></div>
+ 
+    <div style="margin-top:20px">
+        <el-table :data="detailed_gpu_info" border stripe style="width: 100%" id="detailed_gpu_info"> 
+          <el-table-column type="index" label="GPU编号" width="100px"/>
+          <el-table-column prop="modelName" label="GPU型号名称" ></el-table-column>
+          <el-table-column prop="uuid" label="唯一标识符" ></el-table-column>
+          <el-table-column prop="memoryTotalMB" label="总内存大小(MB)" ></el-table-column>
+          <el-table-column prop="driverVersion" label="NVIDIA驱动版本" ></el-table-column>
+          <el-table-column prop="powerLimitW" label="电源使用限制(W)" ></el-table-column>
+        </el-table>
+    </div>
 
-    <div>
-    统计数据:
+    <div class="gradient-divider"></div>
+
+    <div style="margin-top:30px">
+      <h3 class="subtitle">监测数据</h3>
+
+      <div class="flex-container">
+        <div class="chart_cpu_usage" id="chart1">
+          <keep-alive>
+              <smoothLineChart 
+                            ref="chartcomponent1"/>
+            </keep-alive>
+        </div>
+        <div class="chart_cpu_usage" id="chart2">
+          <keep-alive>
+              <smoothLineChart 
+                            ref="chartcomponent2"/>
+          </keep-alive>
+        </div>
+        <div class="chart_cpu_usage" id="chart3">
+          <keep-alive>
+              <smoothLineChart 
+                            ref="chartcomponent3"/>
+                            </keep-alive>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="subtitle">统计数据</h3>
+
+    <div style="margin-top: 30px;">
     <div class="chart_cpu_usage" id="chart4">
       <keep-alive>
           <barChart 
                          ref="chartcomponent4"/>
                         </keep-alive>
     </div>
-  
-
-    </div>
-
-  
-
-  <el-table  :data="tableData1" style="width: 100%">
-    <el-table-column label="GPU温度(摄氏度)">
-      <el-table-column prop="name" label="GPU编号"  />
-      <el-table-column prop="avg" label="平均值"  />
-      <el-table-column prop="max" label="最大值" />
-      <el-table-column prop="min" label="最小值"  />
-      <el-table-column prop="var" label="方差"  />
-      <el-table-column prop="sd" label="标准差"  />
-    </el-table-column>
-  </el-table>
-  <br>
-
-  <el-table  :data="tableData2" style="width: 100%">
-    <el-table-column label="GPU使用率(%)">
-      <el-table-column prop="name" label="GPU编号"  />
-      <el-table-column prop="avg" label="平均值"  />
-      <el-table-column prop="max" label="最大值" />
-      <el-table-column prop="min" label="最小值"  />
-      <el-table-column prop="var" label="方差"  />
-      <el-table-column prop="sd" label="标准差"  />
-    </el-table-column>
-  </el-table>
-  <br>
-
-  <el-table  id="table" :data="tableData3" style="width: 100%">
+    <el-table  id="table" :data="tableData3" style="width: 100%">
     <el-table-column label="GPU功率(瓦特)">
       <el-table-column prop="name" label="GPU编号"  />
       <el-table-column prop="avg" label="平均值"  />
@@ -105,8 +89,56 @@
       <el-table-column prop="var" label="方差"  />
       <el-table-column prop="sd" label="标准差"  />
     </el-table-column>
-  </el-table>
+    </el-table>
+    <div class="gradient-divider"></div>
+    
+
+
+    <div class="chart_cpu_usage" id="chart5">
+      <keep-alive>
+          <barChart 
+                         ref="chartcomponent5"/>
+                        </keep-alive>
+    </div>
+    <el-table  :data="tableData2" style="width: 100%">
+    <el-table-column label="GPU使用率(%)">
+      <el-table-column prop="name" label="GPU编号"  />
+      <el-table-column prop="avg" label="平均值"  />
+      <el-table-column prop="max" label="最大值" />
+      <el-table-column prop="min" label="最小值"  />
+      <el-table-column prop="var" label="方差"  />
+      <el-table-column prop="sd" label="标准差"  />
+    </el-table-column>
+    </el-table>
+    <div class="gradient-divider"></div>
+
+
+    <div class="chart_cpu_usage" id="chart6">
+      <keep-alive>
+          <barChart 
+                         ref="chartcomponent6"/>
+                        </keep-alive>
+    </div>
+    <el-table  :data="tableData1" style="width: 100%">
+    <el-table-column label="GPU温度(摄氏度)">
+      <el-table-column prop="name" label="GPU编号"  />
+      <el-table-column prop="avg" label="平均值"  />
+      <el-table-column prop="max" label="最大值" />
+      <el-table-column prop="min" label="最小值"  />
+      <el-table-column prop="var" label="方差"  />
+      <el-table-column prop="sd" label="标准差"  />
+    </el-table-column>
+    </el-table>
+
+    
+    </div>
+  <div class="gradient-divider"></div>
 </div>
+
+<div v-else>
+请先连接服务器
+</div>
+
 </template>
 
 <script>
@@ -119,15 +151,8 @@ export default{
   },
   data(){
     return{
-      baseinfo: [{
-      }],
-      chart1: {
-      },
-      chart2: {
-      },
-      chart3: {
-      },
-      ifTable:false,
+      baseinfo: [],
+      detailed_gpu_info:[],
       tableData1 : [
       ],
       tableData2 : [
@@ -135,29 +160,47 @@ export default{
       tableData3 : [
       ],
       selectoptions:[
-      {
-        value: 'base_info',
-        label: '服务器信息',
-      },
-      {
-        value: 'chart1',
-        label: 'GPU温度',
-      },
-      {
-        value: 'chart2',
-        label: 'GPU使用率',
-      },
-      {
-        value: 'chart3',
-        label: 'GPU功率',
-      },
-      {
-        value: 'chart4',
-        label: '统计数据',
-      },
-
-
+        {
+          label:"监测数据",
+          options:[
+            {
+              value: 'base_info',
+              label: '服务器信息',
+            },
+            {
+              value: 'chart1',
+              label: '功率',
+            },
+            {
+              value: 'chart2',
+              label: '使用率',
+            },
+            {
+              value: 'chart3',
+              label: '温度',
+            },
+          ]
+        },
+        {
+          label:"统计数据",
+          options:[
+            {
+              value: 'chart4',
+              label: '功率',
+            },
+            {
+              value: 'chart5',
+              label: '使用率统计',
+            },
+            {
+              value: 'chart6',
+              label: '温度统计',
+            },
+          ]
+        }
       ],
+      isSshConnected:this.$store.state.isSshConnected,
+
       interval1: null,
       interval2: null,
     }
@@ -181,7 +224,10 @@ export default{
     async Getbaseinfo(){
       await this.$api.base_info().then((params)=>{
         this.baseinfo[0]=params.data;
-        this.baseinfo[0].pre="基本信息:"
+        this.baseinfo[0].pre="基本信息:";
+      })
+      await this.$api.detailed_gpu_info().then((params)=>{
+        this.detailed_gpu_info=params.data.gpus;
       })
     },
     StartMonitor(){
@@ -238,7 +284,6 @@ export default{
           yAxisName: '瓦', // 设置 yAxisName 的值
           yAxis_min: 0,
           yAxis_max: 300,
-          yAxis_interval: 100
         },
         this.$refs.chartcomponent1.updateData(this.chart1);
     }
@@ -259,7 +304,6 @@ export default{
           yAxisName: '%', // 设置 yAxisName 的值
           yAxis_min: 0,
           yAxis_max: 100,
-          yAxis_interval: 20
         },
         this.$refs.chartcomponent2.updateData(this.chart2);
     }
@@ -280,24 +324,11 @@ export default{
           yAxisName: '摄氏度', // 设置 yAxisName 的值
           yAxis_min: 0,
           yAxis_max: 100,
-          yAxis_interval: 20
         },
         this.$refs.chartcomponent3.updateData(this.chart3);
     }
     else{
       this.updatechart3()
-    }
-    if(this.tableData1.length===0){
-      let tmpgpuinfo = 
-            {
-              chartTitle: 'GPU温度(摄氏度)',
-              yAxisData: ['avg','max','min','var','sd'],
-              seriesData:[{name:'默认',avg:0,max:0,min:0,var:0,sd:0}],
-              xAxisName: '摄氏度', 
-              yAxisName: '指标', // 设置 yAxisName 的值
-            };
-      this.chart4 = tmpgpuinfo;
-      this.$refs.chartcomponent4.updateData(this.chart4); 
     }
     },
     updatechart1(){
@@ -360,14 +391,38 @@ export default{
     updatechart4(){
       let tmpgpuinfo = 
             {
-              chartTitle: 'GPU温度(摄氏度)',
+              chartTitle: 'GPU功率(W)',
               yAxisData: ['平均值','最大值','最小值','方差','平均差'],
-              seriesData:this.tableData1,
-              xAxisName: '摄氏度', 
+              seriesData:this.tableData3,
+              xAxisName: '功率', 
               yAxisName: '指标', // 设置 yAxisName 的值
             };
       this.chart4 = tmpgpuinfo;
       this.$refs.chartcomponent4.updateData(this.chart4); 
+    },
+    updatechart5(){
+      let tmpgpuinfo = 
+            {
+              chartTitle: 'GPU使用率(%)',
+              yAxisData: ['平均值','最大值','最小值','方差','平均差'],
+              seriesData:this.tableData2,
+              xAxisName: '使用率', 
+              yAxisName: '指标', // 设置 yAxisName 的值
+            };
+      this.chart5 = tmpgpuinfo;
+      this.$refs.chartcomponent5.updateData(this.chart5); 
+    },
+    updatechart6(){
+      let tmpgpuinfo = 
+            {
+              chartTitle: 'GPU温度(摄氏度)',
+              yAxisData: ['平均值','最大值','最小值','方差','平均差'],
+              seriesData:this.tableData1,
+              xAxisName: '温度', 
+              yAxisName: '指标', // 设置 yAxisName 的值
+            };
+      this.chart6 = tmpgpuinfo;
+      this.$refs.chartcomponent6.updateData(this.chart6); 
     },
     updatetable(){
       this.tableData1 = Object.keys(this.$store.state.temperatures).map(gpuName => {
@@ -422,7 +477,8 @@ export default{
             };
       });
       this.updatechart4();
-      console.log(this.tableData1);
+      this.updatechart5();
+      this.updatechart6();
     },
     updatechart(){
       this.updatechart1()
@@ -489,6 +545,26 @@ export default{
     margin-top: 20px;
     padding-top: 20px;
   }
+  .gradient-divider {
+  height: 2px;
+  background: linear-gradient(to right, #fff, #6e66c5, #fff);
+  margin: 20px 0;
+}
+
+.subtitle {
+  font-size: 18px; /* 根据需要调整字体大小 */
+  color: #383b85; /* 深色字体更易阅读 */
+  font-weight: bold; /* 加粗字体 */
+  text-align: center; /* 居中对齐 */
+  margin-top: 20px; /* 上间距 */
+  margin-bottom: 20px; /* 下间距 */
+  background-color: #f5f5f5; /* 轻灰色背景 */
+  padding: 10px; /* 内填充 */
+  border-radius: 5px; /* 轻微的边角圆滑 */
+  letter-spacing: 20px;
+}
+
+
 
 
 

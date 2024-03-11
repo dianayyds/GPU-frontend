@@ -12,9 +12,9 @@ Aside.vue
          text-color="rgba(255, 255, 255, 0.65)" >
 
           <div v-if=!isAdmin>
-          <el-menu-item index="/initdatabase">
+          <el-menu-item index="/initssh">
             <el-icon><InfoFilled /></el-icon>
-             <span>初始化数据库</span>
+             <span>连接服务器</span>
            </el-menu-item>
           </div>
 

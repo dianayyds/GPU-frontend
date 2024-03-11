@@ -1,5 +1,5 @@
 <template>
-
+<div v-if="isSshConnected">
 <div class="mybutton">
 <el-button size="default"  type="success" @click="StartMonitor"><el-icon><Open /></el-icon>开始监测</el-button>
 <el-button size="default" type="danger" @click="StopMonitor"><el-icon><TurnOff /></el-icon>停止监测</el-button>
@@ -20,12 +20,12 @@
 </div>
   <div>
     <el-table :data="baseinfo" style="width: 100%" id="base_info">
-      <el-table-column prop="operatingSystem" label="操作系统" width="180"></el-table-column>
-      <el-table-column prop="hostname" label="主机名" width="180"></el-table-column>
-      <el-table-column prop="kernelVersion" label="内核版本" width="180"></el-table-column>
-      <el-table-column prop="cpuArchitecture" label="CPU架构" width="180"></el-table-column>
-      <el-table-column prop="release" label="发行版版本" width="180"></el-table-column>
-      <el-table-column prop="host" label="ip地址" width="180"></el-table-column>
+      <el-table-column prop="operatingSystem" label="操作系统" ></el-table-column>
+      <el-table-column prop="hostname" label="主机名" ></el-table-column>
+      <el-table-column prop="kernelVersion" label="内核版本"></el-table-column>
+      <el-table-column prop="cpuArchitecture" label="CPU架构" ></el-table-column>
+      <el-table-column prop="release" label="发行版版本" ></el-table-column>
+      <el-table-column prop="host" label="ip地址"></el-table-column>
     </el-table>
   </div>
   <div class="flex-container">
@@ -36,7 +36,11 @@
                           />
       </div>
   </div>
-  
+</div>
+
+<div v-else>
+请先连接服务器
+</div>
 </template>
 
 <script>
@@ -68,6 +72,7 @@ export default{
 
 
       ],
+      isSshConnected:this.$store.state.isSshConnected,
     }
   },
   beforeUnmount() {

@@ -80,3 +80,20 @@ export function gpu_info(params){
     })
 }
 
+
+export function detailed_gpu_info(params){
+    return request({
+        url:'/detailed_gpu_info',
+        method:'get',
+        params
+    })
+}
+
+export function ssh_connect(params){
+    return request({
+        url:'/ssh_connect',
+        method:'post',
+        params
+    })
+}
+

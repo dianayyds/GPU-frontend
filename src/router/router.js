@@ -39,8 +39,8 @@ const routes = [
             }
         },
         {
-          path: '/initdatabase',
-          component: () => import('@/views/components/initdatabase.vue'),
+          path: '/initssh',
+          component: () => import('@/views/components/initssh.vue'),
           meta: {
              requiresAuth: true 
             }

@@ -12,7 +12,8 @@
   </template>
         
         <script>
-      
+import { ElMessage } from 'element-plus';
+
         export default {
           async mounted() {
             await this.$api.users_info().then((param)=>{
@@ -36,7 +37,11 @@
                 "Username":scope.row.Username,
                 "Password":scope.row.Password,
               }
-              await this.$api.delete_user(res)
+              await this.$api.delete_user(res);
+              ElMessage({
+                message: '删除成功',
+                type: 'success'
+              });
               this.users.splice(scope.$index, 1);
             }
           }
