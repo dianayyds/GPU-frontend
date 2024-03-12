@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import * as api from '@/api/index.js'
 import { ElMessage } from "element-plus"
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 const routes = [
   {
     path: '/:pathMatch(.*)*',
@@ -84,6 +86,7 @@ router.beforeEach((to, from, next) => {
             next('/');
           }
           else if(now<param.data.claims.exp){
+              NProgress.start();
               next();
           }
           else{
@@ -101,5 +104,8 @@ router.beforeEach((to, from, next) => {
   }
 });
 
+router.afterEach(() => {
+  NProgress.done(); // 完成进度条
+});
 
 export default router

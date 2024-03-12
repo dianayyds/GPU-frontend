@@ -1,3 +1,203 @@
+
+ 
+<template>
+	<div class="center">
+		<div class="logon">
+			<div :class="overlaylong">
+				<div class="overlaylong-Signin" v-if="disfiex == 0" @keyup.enter="handleSignin" tabindex="0">
+					<h2 class="overlaylongH2">登录</h2>
+					<input type="text" placeholder="请输入用户名" v-model="username" >
+					<input type="password" placeholder="请输入密码" v-model="password">
+					<button  class="inupbutton" @click="handleSignin">登录</button>
+				</div>
+				<div class="overlaylong-Signup" v-if="disfiex == 1" @keyup.enter="handleSignup">
+					<h2 class="overlaylongH2">注册</h2>
+					<input type="text" placeholder="请输入用户名" v-model="username" >
+					<input type="password" placeholder="请输入密码" v-model="password">
+					<button  class="inupbutton" @click="handleSignup">注册</button>
+				</div>
+ 
+			</div>
+			<div :class="overlaytitle">
+				<div class="overlaytitle-Signin" v-if="disfiex == 0">
+					<h2 class="overlaytitleH2">你好,朋友！</h2>
+					<p class="overlaytitleP">
+						输入你的个人信息并加入我们!	
+					</p>
+					<div class="buttongohs" @click="Signin">来注册！</div>
+				</div>
+				<div class="overlaytitle-Signup" v-if="disfiex == 1">
+					<h2 class="overlaytitleH2">已有账号?</h2>
+					<p class="overlaytitleP">输入你的信息就可以啦！</p>
+					<div class="buttongohs" @click="Signup">来登录！</div>
+				</div>
+			</div>
+		</div>
+ 
+	</div>
+</template>
+ 
+<script>
+	export default {
+		data() {
+			return {
+				overlaylong: 'overlaylong',
+				overlaytitle: 'overlaytitle',
+				disfiex: 0,
+				username: '',
+        		password: '',
+			}
+		},
+		methods: {
+			async handleSignup() {
+			// 这里处理注册逻辑
+			if(this.username===""){
+				this.$message({
+				type: 'error',
+				message: '用户名不能为空',
+				showClose: true,
+			})
+				return
+			}
+			if(this.password===""){
+				this.$message({
+				type: 'error',
+				message: '密码不能为空',
+				showClose: true,
+			})
+				return
+			}
+			//将请求转为对象
+			const usernameIsValid = /^[A-Za-z0-9]{6,20}$/.test(this.username);
+			const passwordIsValid = this.password.length >= 6;
+			if (!usernameIsValid) {
+				this.$message({
+				type: 'error',
+				message: '用户名必须长度为6到20个字符,且为小写字母或者数字',
+			})
+			return
+			}
+			if (!passwordIsValid) {
+				this.$message({
+				type: 'error',
+				message: '密码必须至少为6字符',
+			})
+			return
+			}
+			let res = {
+			Username: this.username, // 假设 this.username 是你从输入字段绑定的数据
+			Password: this.password,  // 同上，针对密码字段
+			};
+			//调用api接口
+			await this.$api.sign_up(res).then((param)=>{
+			if (param.data.code === 0) {
+				this.$message({
+				type: 'success',
+				message: '注册成功!',
+			})
+  			}
+			else if(param.data.code === 1){
+				// this.$alert.put("用户名已经存在,请您修改用户名")
+				this.$message({
+				type: 'error',
+				message: '用户名已经存在,请您修改用户名',
+			})
+			}
+			else if(param.data.code === 2){
+				// this.$alert.put("添加用户失败")
+				this.$message({
+				type: 'error',
+				message: '添加用户失败',
+			})
+			}
+			else{
+				// this.$alert.put("未知错误,请联系管理员")
+				this.$message({
+				type: 'error',
+				message: '未知错误,请联系管理员',
+			})
+			}
+			})
+			this.username="";
+			this.password="";
+			},
+
+			async handleSignin() {
+			// 这里处理登录逻辑
+			if(this.username===""){
+				this.$message({
+				type: 'error',
+				message: '用户名不能为空',
+			})
+				return
+			}
+			if(this.password===""){
+				this.$message({
+				type: 'error',
+				message: '密码不能为空',
+			})
+				return
+			}
+			if(this.username==="admin" && this.password==="admin"){
+				localStorage.setItem('token', "admin")
+				this.$store.state.isAdmin=true;
+				this.$router.push('/layout')
+				return
+			}
+			this.$store.state.isAdmin=false;
+			//将请求转为对象
+			let res = {
+				Username: this.username,
+				Password:this.password,
+				// Ip: '', // 设置默认的 IP 地址
+				// Port: '',    // 也可以为其他字段设置默认值，例如默认的端口号
+				// DatabaseName: '',    // 其他字段可以保留为空或设置相应的默认值
+				// DatabaseUsername: '', // 默认用户名
+				// DatabasePassword: ''     // 默认密码可以为空，视安全策略而定
+			};
+			//调用api接口
+			await this.$api.sign_in(res).then((param)=>{
+			if (param.data.code === 0) {
+				this.$message({
+				type: 'success',
+				message: '登录成功',
+			})
+				localStorage.setItem('token', param.data.token)
+				this.$router.push('/layout')
+  			}
+			else{
+				this.$message({
+				type: 'error',
+				message: '密码错误',
+			})
+			}
+			})
+			this.username="";
+			this.password="";
+
+			},
+
+			Signin() {
+				this.overlaylong = "overlaylongleft"
+				this.overlaytitle = "overlaytitleright"
+				setTimeout(() => {
+					this.disfiex = 1
+				}, 200)
+			},
+			Signup() {
+				this.overlaylong = "overlaylongright"
+				this.overlaytitle = "overlaytitleleft"
+ 
+				setTimeout(() => {
+					this.disfiex = 0
+				}, 200)
+ 
+			},
+			
+		}
+	}
+</script>
+
 <style>
 	button:hover {
 	background-color: #29eac4; /* 举例颜色 */
@@ -188,205 +388,3 @@
 		margin-top: 30px;
 	}
 </style>
- 
-<template>
-
-	<div class="center">
-		<div class="logon">
-			<div :class="overlaylong">
-				<div class="overlaylong-Signin" v-if="disfiex == 0" @keyup.enter="handleSignin" tabindex="0">
-					<h2 class="overlaylongH2">登录</h2>
-					<input type="text" placeholder="请输入用户名" v-model="username" >
-					<input type="password" placeholder="请输入密码" v-model="password">
-					<button  class="inupbutton" @click="handleSignin">登录</button>
-				</div>
-				<div class="overlaylong-Signup" v-if="disfiex == 1" @keyup.enter="handleSignup">
-					<h2 class="overlaylongH2">注册</h2>
-					<input type="text" placeholder="请输入用户名" v-model="username" >
-					<input type="password" placeholder="请输入密码" v-model="password">
-					<button  class="inupbutton" @click="handleSignup">注册</button>
-				</div>
- 
-			</div>
-			<div :class="overlaytitle">
-				<div class="overlaytitle-Signin" v-if="disfiex == 0">
-					<h2 class="overlaytitleH2">你好,朋友！</h2>
-					<p class="overlaytitleP">
-						输入你的个人信息并加入我们!	
-					</p>
-					<div class="buttongohs" @click="Signin">来注册！</div>
-				</div>
-				<div class="overlaytitle-Signup" v-if="disfiex == 1">
-					<h2 class="overlaytitleH2">已有账号?</h2>
-					<p class="overlaytitleP">输入你的信息就可以啦！</p>
-					<div class="buttongohs" @click="Signup">来登录！</div>
-				</div>
-			</div>
-		</div>
- 
-	</div>
-</template>
- 
-<script>
-	export default {
-		data() {
-			return {
-				overlaylong: 'overlaylong',
-				overlaytitle: 'overlaytitle',
-				disfiex: 0,
-				username: '',
-        		password: '',
-			}
-		},
-		methods: {
-			async handleSignup() {
-			// 这里处理注册逻辑
-			if(this.username===""){
-				this.$message({
-				type: 'error',
-				message: '用户名不能为空',
-				showClose: true,
-			})
-				return
-			}
-			if(this.password===""){
-				this.$message({
-				type: 'error',
-				message: '密码不能为空',
-				showClose: true,
-			})
-				return
-			}
-			//将请求转为对象
-			const usernameIsValid = /^[A-Za-z0-9]{6,20}$/.test(this.username);
-			const passwordIsValid = this.password.length >= 6;
-			if (!usernameIsValid) {
-				this.$message({
-				type: 'error',
-				message: '用户名必须长度为6到20个字符,且为小写字母或者数字',
-			})
-			return
-			}
-			if (!passwordIsValid) {
-				this.$message({
-				type: 'error',
-				message: '密码必须至少为6字符',
-			})
-			return
-			}
-			let res = {
-			Username: this.username, // 假设 this.username 是你从输入字段绑定的数据
-			Password: this.password,  // 同上，针对密码字段
-			};
-			//调用api接口
-			await this.$api.sign_up(res).then((param)=>{
-			if (param.data.code === 0) {
-				this.$message({
-				type: 'success',
-				message: '注册成功!',
-			})
-  			}
-			else if(param.data.code === 1){
-				// this.$alert.put("用户名已经存在,请您修改用户名")
-				this.$message({
-				type: 'error',
-				message: '用户名已经存在,请您修改用户名',
-			})
-			}
-			else if(param.data.code === 2){
-				// this.$alert.put("添加用户失败")
-				this.$message({
-				type: 'error',
-				message: '添加用户失败',
-			})
-			}
-			else{
-				// this.$alert.put("未知错误,请联系管理员")
-				this.$message({
-				type: 'error',
-				message: '未知错误,请联系管理员',
-			})
-			}
-			})
-			this.username="";
-			this.password="";
-			},
-
-			async handleSignin() {
-			// 这里处理登录逻辑
-			if(this.username===""){
-				this.$message({
-				type: 'error',
-				message: '用户名不能为空',
-			})
-				return
-			}
-			if(this.password===""){
-				this.$message({
-				type: 'error',
-				message: '密码不能为空',
-			})
-				return
-			}
-			if(this.username==="admin" && this.password==="admin"){
-				localStorage.setItem('token', "admin")
-				this.$store.state.isAdmin=true;
-				this.$router.push('/layout')
-				return
-			}
-			this.$store.state.isAdmin=false;
-			//将请求转为对象
-
-	
-
-			let res = {
-				Username: this.username,
-				Password:this.password,
-				// Ip: '', // 设置默认的 IP 地址
-				// Port: '',    // 也可以为其他字段设置默认值，例如默认的端口号
-				// DatabaseName: '',    // 其他字段可以保留为空或设置相应的默认值
-				// DatabaseUsername: '', // 默认用户名
-				// DatabasePassword: ''     // 默认密码可以为空，视安全策略而定
-			};
-			//调用api接口
-			await this.$api.sign_in(res).then((param)=>{
-			if (param.data.code === 0) {
-				this.$message({
-				type: 'success',
-				message: '登录成功',
-			})
-				localStorage.setItem('token', param.data.token)
-				this.$router.push('/layout')
-  			}
-			else{
-				this.$message({
-				type: 'error',
-				message: '密码错误',
-			})
-			}
-			})
-			this.username="";
-			this.password="";
-
-			},
-
-			Signin() {
-				this.overlaylong = "overlaylongleft"
-				this.overlaytitle = "overlaytitleright"
-				setTimeout(() => {
-					this.disfiex = 1
-				}, 200)
-			},
-			Signup() {
-				this.overlaylong = "overlaylongright"
-				this.overlaytitle = "overlaytitleleft"
- 
-				setTimeout(() => {
-					this.disfiex = 0
-				}, 200)
- 
-			},
-			
-		}
-	}
-</script>

@@ -22,49 +22,18 @@
     </div>
 
     <div v-else>
-        已经初始化了服务器连接！无需重复连接
+      <div class="connection-initialized">
+      <div class="content">
+        <h1><el-icon><SuccessFilled /></el-icon>已连接</h1>
+        <p>服务器连接已成功初始化,无需重复连接。</p>
+        <button @click="GOTOsystem">前往监测系统</button>
+      </div>
+  </div>
     </div>
 </template>
   
   <script>
   export default {
-//    async mounted(){
-//       let res={
-//             Token:localStorage.getItem('token')
-//         }
-//       await this.$api.parse_token(res).then((params)=>{
-//         res={
-//           username:params.data.claims.username
-//         }
-//       }
-//       )
-//       await this.$api.user_info_byname(res).then((params)=>{
-//         //params.data.user.Ip
-//         if(params.data.user.Ip==='')
-//         {
-//           this.isDatabaseInitialized=false;
-//         }else{
-//           this.dbInfo.DatabaseName=params.data.user.DatabaseName;
-//           this.$api.init_database(params.data.user).then((params)=>{
-//           if(params.data.code==0){
-//             this.isDatabaseInitialized=true;
-//             this.$message({
-//               message: '数据库初始化成功',
-//               type: 'success'
-//             });
-//           }
-//           else{
-//             this.$message({
-//               message: params.data.msg.Message,
-//               type: 'error'
-//             });
-//           }
-//         }
-//         )
-//         }
-//       }
-//       )
-//     },
 
     data() {
       return {
@@ -78,6 +47,9 @@
       };
     },
     methods: {
+        GOTOsystem(){
+          this.$router.push('/gpuinfo')
+        },
         resetForm(){
             this.sshInfo.host=""
             this.sshInfo.port=""
@@ -128,5 +100,38 @@
   font-size: 16px; /* 字体大小 */
   color: #333; /* 字体颜色 */
   margin-bottom: 15px; /* 与按钮的间距 */
+}
+
+.connection-initialized {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+}
+
+.content {
+  max-width: 500px;
+  padding: 20px;
+}
+
+.icon {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #45a049;
 }
 </style>

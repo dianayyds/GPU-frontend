@@ -8,9 +8,11 @@ import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import store from './store' 
 
+
 const app=createApp(App)
 app.config.globalProperties.$api=api
 app.config.globalProperties.$message = ElMessage;
+
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
   }
