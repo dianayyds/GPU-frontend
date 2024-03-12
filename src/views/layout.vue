@@ -18,11 +18,6 @@ export default {
         AsideNav,
         Header,
       },
-      data() {
-        return {
-          username:"",
-        }
-      },
 };
 </script>
 

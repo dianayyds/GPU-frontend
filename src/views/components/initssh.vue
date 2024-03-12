@@ -1,4 +1,5 @@
 <template>
+  <div style="background-color: #eee;">
     <div v-if="!isSshConnected" @keyup.enter="submitForm" tabindex="0">
       <el-form ref="dbForm" :model="dbInfo" label-width="120px" >
         <el-form-item label="IP 地址">
@@ -26,13 +27,14 @@
       <div class="content">
         <h1><el-icon><SuccessFilled /></el-icon>已连接</h1>
         <p>服务器连接已成功初始化,无需重复连接。</p>
-        <button @click="GOTOsystem">前往监测系统</button>
+        <el-button @click="GOTOsystem">前往监测系统</el-button>
       </div>
   </div>
     </div>
+  </div>
 </template>
   
-  <script>
+<script>
   export default {
 
     data() {
@@ -78,29 +80,9 @@
       },
     }
   };
-  </script>
-  <style>
-  .box1 {
-  margin-bottom: 20px; /* 在盒子 1 的底部添加 20px 的外边距 */
-}
-  .db-initialized {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 200px; /* 根据需要调整高度 */
-  background-color: #f2f2f2; /* 背景颜色 */
-  border-radius: 10px; /* 圆角边框 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 阴影效果 */
-  margin: 20px; /* 外边距 */
-  padding: 20px; /* 内边距 */
-}
+</script>
 
-.db-initialized p {
-  font-size: 16px; /* 字体大小 */
-  color: #333; /* 字体颜色 */
-  margin-bottom: 15px; /* 与按钮的间距 */
-}
+<style>
 
 .connection-initialized {
   display: flex;
@@ -115,23 +97,5 @@
   padding: 20px;
 }
 
-.icon {
-  width: 100px;
-  height: 100px;
-  margin: 0 auto;
-}
 
-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  border: none;
-  background-color: #4CAF50;
-  color: white;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-button:hover {
-  background-color: #45a049;
-}
 </style>

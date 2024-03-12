@@ -1,24 +1,27 @@
 <template>
 <div v-if="isSshConnected">
-<div class="mybutton">
-<el-button size="default"  type="success" @click="StartMonitor"><el-icon><Open /></el-icon>开始监测</el-button>
-<el-button size="default" type="danger" @click="StopMonitor"><el-icon><TurnOff /></el-icon>停止监测</el-button>
-</div>
-<div class="nav-container">
-<el-select 
-    @change="scrollTo"
-    filterable
-    placeholder="快速前往"
-    size="default"
-   >
-      <el-option
-        v-for="item in selectoptions"
-        :label="item.label"
-        :value="item.value"
-      />
-  </el-select>
-</div>
-  <div>
+  <div class="mybutton">
+  <el-button size="default"  type="success" @click="StartMonitor"><el-icon><Open /></el-icon>开始监测</el-button>
+  <el-button size="default" type="danger" @click="StopMonitor"><el-icon><TurnOff /></el-icon>停止监测</el-button>
+  </div>
+
+    <div class="gradient-divider"></div>
+    <div class="nav-container">
+      <el-select @change="scrollTo" placeholder="快速前往" size="small">
+        <el-option-group
+          v-for="group in selectoptions"
+          :label="group.label">
+          <el-option
+            v-for="item in group.options"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-option-group>
+
+      </el-select>
+    </div>
+  
+
     <el-table :data="baseinfo" style="width: 100%" id="base_info">
       <el-table-column prop="operatingSystem" label="操作系统" ></el-table-column>
       <el-table-column prop="hostname" label="主机名" ></el-table-column>
@@ -27,166 +30,196 @@
       <el-table-column prop="release" label="发行版版本" ></el-table-column>
       <el-table-column prop="host" label="ip地址"></el-table-column>
     </el-table>
+
+    <div class="flex-container">
+      <div class="chart_cpu_usage" id="chart1">
+          <smoothLineChart 
+                          ref="chartcomponent1"
+                            />
+        </div>
+    </div>
+
   </div>
-  <div class="flex-container">
-    
-    <div class="chart_cpu_usage" id="chart1">
-        <smoothLineChart 
-                         ref="chartcomponent1"
-                          />
+
+  <div v-else style="background-color: #eee;">
+      <div class="connection-initialized">
+      <div class="content">
+        <h1><el-icon><WarningFilled /></el-icon>
+          未初始化服务器
+        </h1>
+        <el-button @click="GOTOsystem">前往初始化服务器</el-button>
       </div>
   </div>
-</div>
-
-<div v-else>
-请先连接服务器
-</div>
+  </div>
 </template>
 
 <script>
-import smoothLineChart from './smoothLineChart.vue';
-export default{
-  components: {
-    smoothLineChart,
-  },
-  data(){
-    return{
-      baseinfo: [{
-      }],
-      chart1: {
-      },
-      interval1:null,
-      selectoptions:[
-      {
-        value: 'base_info',
-        label: '服务器信息',
-      },
-      {
-        value: 'chart1',
-        label: 'CPU使用率',
-      },
-      {
-        value: 'table',
-        label: '统计数据',
-      },
+  import smoothLineChart from './smoothLineChart.vue';
+  export default{
+    components: {
+      smoothLineChart,
+    },
+    data(){
+      return{
+        baseinfo: [{
+        }],
+        chart1: {
+        },
+        interval1:null,
+        selectoptions:[
+        {
+          label:"监测数据",
+          options:[
+            {
+              value: 'base_info',
+              label: '服务器信息',
+            },
+            {
+              value: 'chart1',
+              label: 'CPU使用率',
+            },
+          ]
+        },
+        {
+          label:"统计数据",
+          options:[
+            {
+              value: 'chart2',
+              label: 'CPU使用率',
+            },
 
-
+          ]
+        }
       ],
-      isSshConnected:this.$store.state.isSshConnected,
-    }
-  },
-  beforeUnmount() {
-    clearInterval(this.interval1);
-    this.interval1=null;
-  },
-  async mounted(){
-    await this.Getbaseinfo();
-    this.initial_chart();
-    if(this.$store.state.ismonitoring===true)
-    this.StartMonitor();
-    else
-    this.StopMonitor();
-  },
-  methods:{
-    async Getbaseinfo(){
-      await this.$api.base_info().then((params)=>{
-        this.baseinfo[0]=params.data;
-      })
-
+        isSshConnected:this.$store.state.isSshConnected,
+      }
     },
-    async StartMonitor(){
-      this.$store.state.ismonitoring=true;
-      if(this.interval1===null)
-      this.interval1 = setInterval(this.fetchData, 2000);
-    },
-    async StopMonitor(){
-      this.$store.state.ismonitoring=false;
+    beforeUnmount() {
       clearInterval(this.interval1);
       this.interval1=null;
     },
-    async fetchData(){
-      await this.$api.gpu_info().then((params)=>{
-        if(params.data.code!=0){
-          this.$message({
-            message: params.data.msg,
-            type: 'error'
-          });
-          return
-        }
-        this.$store.commit('Pushgpuinfo',params.data);
-      })
-      await this.$api.cpu_info().then((params)=>{
-        //用户空间使用、系统空间使用和CPU空闲的值,params.data.userUsage|systemUsage|idle
-        if(params.data.code!=0){
-          this.$message({
-            message: params.data.msg,
-            type: 'error'
-          });
-          return
-        }
-        this.$store.commit('Pushcpuinfo',params.data);
-      })
-      this.updatechart1();
+    async mounted(){
+      await this.Getbaseinfo();
+      this.initial_chart();
+      if(this.$store.state.ismonitoring===true)
+      this.StartMonitor();
+      else
+      this.StopMonitor();
     },
-    initial_chart(){
-    if(this.$store.state.userUsages.length===0)
-    {
-      const xData = [];
-      const yData = [];
-      this.chart1 = 
-        {
-          chartTitle: 'CPU利用率(%)',
-          xAxisData: xData,
-          seriesData: [
-          { name: '用户程序占CPU百分比', type: 'line', data: yData },
-          { name: '系统程序占CPU百分比', type: 'line', data: yData },
-          { name: 'CPU空闲率', type: 'line', data: yData },
-          ],
-          xAxisName: '时间轴', 
-          yAxisName: '%', // 设置 yAxisName 的值
-          yAxis_min: 0,
-          yAxis_max: 100,
-          yAxis_interval: 20
-        },
-        this.$refs.chartcomponent1.updateData(this.chart1);
-    }
-    else{
-      this.updatechart1();
-    }
+    methods:{
+      GOTOsystem(){
+      this.$router.push('/initssh')
     },
-    updatechart1(){
-      let tmpcpuinfo = 
-            {
-              chartTitle: 'CPU利用率(%)',
-              xAxisData: this.$store.state.cpuxdata,
-              seriesData: [
-              { name: '用户程序占CPU百分比', type: 'line', data: this.$store.state.userUsages },
-              { name: '系统程序占CPU百分比', type: 'line', data: this.$store.state.systemUsages },
-              { name: 'CPU空闲率', type: 'line', data: this.$store.state.idleUsages },
+      async Getbaseinfo(){
+        await this.$api.base_info().then((params)=>{
+          this.baseinfo[0]=params.data;
+        })
+
+      },
+      async StartMonitor(){
+        this.$store.state.ismonitoring=true;
+        if(this.interval1===null)
+        this.interval1 = setInterval(this.fetchData, 2000);
+      },
+      async StopMonitor(){
+        this.$store.state.ismonitoring=false;
+        clearInterval(this.interval1);
+        this.interval1=null;
+      },
+      async fetchData(){
+        await this.$api.gpu_info().then((params)=>{
+          if(params.data.code!=0){
+            this.$message({
+              message: params.data.msg,
+              type: 'error'
+            });
+            return
+          }
+          this.$store.commit('Pushgpuinfo',params.data);
+        })
+        await this.$api.cpu_info().then((params)=>{
+          //用户空间使用、系统空间使用和CPU空闲的值,params.data.userUsage|systemUsage|idle
+          if(params.data.code!=0){
+            this.$message({
+              message: params.data.msg,
+              type: 'error'
+            });
+            return
+          }
+          this.$store.commit('Pushcpuinfo',params.data);
+        })
+        this.updatechart1();
+      },
+      initial_chart(){
+      if(this.$store.state.userUsages.length===0)
+      {
+        const xData = [];
+        const yData = [];
+        this.chart1 = 
+          {
+            chartTitle: 'CPU利用率(%)',
+            xAxisData: xData,
+            seriesData: [
+            { name: '用户程序占CPU百分比', type: 'line', data: yData },
+            { name: '系统程序占CPU百分比', type: 'line', data: yData },
+            { name: 'CPU空闲率', type: 'line', data: yData },
             ],
             xAxisName: '时间轴', 
             yAxisName: '%', // 设置 yAxisName 的值
             yAxis_min: 0,
             yAxis_max: 100,
-            yAxis_interval: 20,
-            };
-        this.chart1 = tmpcpuinfo;
-        this.$refs.chartcomponent1.updateData(this.chart1); 
-
-    },
-    scrollTo(id){
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+            yAxis_interval: 20
+          },
+          this.$refs.chartcomponent1.updateData(this.chart1);
       }
-    
+      else{
+        this.updatechart1();
+      }
+      },
+      updatechart1(){
+        let tmpcpuinfo = 
+              {
+                chartTitle: 'CPU利用率(%)',
+                xAxisData: this.$store.state.cpuxdata,
+                seriesData: [
+                { name: '用户程序占CPU百分比', type: 'line', data: this.$store.state.userUsages },
+                { name: '系统程序占CPU百分比', type: 'line', data: this.$store.state.systemUsages },
+                { name: 'CPU空闲率', type: 'line', data: this.$store.state.idleUsages },
+              ],
+              xAxisName: '时间轴', 
+              yAxisName: '%', // 设置 yAxisName 的值
+              yAxis_min: 0,
+              yAxis_max: 100,
+              yAxis_interval: 20,
+              };
+          this.chart1 = tmpcpuinfo;
+          this.$refs.chartcomponent1.updateData(this.chart1); 
+
+      },
+      scrollTo(id){
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      
+      }
     }
   }
-}
 </script>
 
 <style>
-.mybutton{
+.connection-initialized {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  }
+
+  .content {
+    max-width: 500px;
+    padding: 20px;
+  }
+  .mybutton{
     top:0;
     width:40%;
   }
@@ -202,16 +235,21 @@ export default{
     right:150px;
     z-index: 1000;
   }
-
   .flex-container {
     display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: space-around;
+    /* flex-direction定义主轴方向 row为水平 column垂直 */
+    flex-direction: row;
+    /* flex-wrap超出容器长度是否换行 */
+    flex-wrap: wrap;
+    /* justify-content子元素在主轴上的对齐方式 */
+    justify-content: space-evenly;
+    /* align-content多行对齐方式 */
     align-content: space-around;
     padding:0 15px 15px 15px;
   }
   .chart_cpu_usage {
+    width: 100%;
+    height: 432px;
     background: #fafbfd;
     border-radius: 6px 6px 6px 6px;
     opacity: 1;
@@ -219,10 +257,38 @@ export default{
     margin-top: 20px;
     padding-top: 20px;
   }
-
-  .flex-chart-contain{
-  width: 100%;
+  .base_info {
+    width: 100%;
+    height: 100px;
+    background: #fafbfd;
+    border-radius: 0px 6px 6px 6px;
+    opacity: 1;
+    border: 1px solid #f0f0f0;
+    margin-top: 20px;
+    padding-top: 20px;
+  }
+  .gradient-divider {
+  height: 2px;
+  background: linear-gradient(to right, #fff, #6e66c5, #fff);
+  margin: 20px 0;
 }
 
+.subtitle {
+  font-size: 18px; /* 根据需要调整字体大小 */
+  color: #383b85; /* 深色字体更易阅读 */
+  font-weight: bold; /* 加粗字体 */
+  text-align: center; /* 居中对齐 */
+  margin-top: 20px; /* 上间距 */
+  margin-bottom: 20px; /* 下间距 */
+  background-color: #f5f5f5; /* 轻灰色背景 */
+  padding: 10px; /* 内填充 */
+  border-radius: 5px; /* 轻微的边角圆滑 */
+  letter-spacing: 20px;
+}
+
+
+
+
+
 </style>
-  
+    

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isSshConnected">
+<div v-if="isSshConnected">
     <div class="mybutton">
     <el-button size="default"  type="success" @click="StartMonitor"><el-icon><Open /></el-icon>开始监测</el-button>
     <el-button size="default" type="danger" @click="StopMonitor"><el-icon><TurnOff /></el-icon>停止监测</el-button>
@@ -48,7 +48,6 @@
 
     <div style="margin-top:30px">
       <h3 class="subtitle">监测数据</h3>
-
       <div class="flex-container">
         <div class="chart_cpu_usage" id="chart1">
           <keep-alive>
@@ -135,8 +134,15 @@
   <div class="gradient-divider"></div>
 </div>
 
-<div v-else>
-请先连接服务器
+<div v-else style="background-color: #eee;">
+      <div class="connection-initialized">
+      <div class="content">
+        <h1><el-icon><WarningFilled /></el-icon>
+          未初始化服务器
+        </h1>
+        <el-button @click="GOTOsystem">前往初始化服务器</el-button>
+      </div>
+  </div>
 </div>
 
 </template>
@@ -161,12 +167,17 @@ export default{
       ],
       selectoptions:[
         {
-          label:"监测数据",
+          label:"服务器信息",
           options:[
             {
               value: 'base_info',
               label: '服务器信息',
             },
+          ]
+        },
+        {
+          label:"监测数据",
+          options:[
             {
               value: 'chart1',
               label: '功率',
@@ -200,7 +211,6 @@ export default{
         }
       ],
       isSshConnected:this.$store.state.isSshConnected,
-
       interval1: null,
       interval2: null,
     }
@@ -221,6 +231,9 @@ export default{
       this.interval2=null;
   },
   methods:{
+    GOTOsystem(){
+      this.$router.push('/initssh')
+    },
     async Getbaseinfo(){
       await this.$api.base_info().then((params)=>{
         this.baseinfo[0]=params.data;
@@ -497,6 +510,17 @@ export default{
 </script>
 
 <style>
+.connection-initialized {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  }
+
+  .content {
+    max-width: 500px;
+    padding: 20px;
+  }
   .mybutton{
     top:0;
     width:40%;

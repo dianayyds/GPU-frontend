@@ -23,6 +23,7 @@
     "vuex": "^4.1.0"
   },
   "devDependencies": {
+    "@types/nprogress": "^0.2.3",
     "@vitejs/plugin-vue": "^4.5.1",
     "tailwindcss": "^3.4.1",
     "vite": "^5.0.5"
