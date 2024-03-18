@@ -50,6 +50,7 @@ export default{
             utilizations:{},
             temperatures:{},
           };
+          //将所有数据初始化
         Object.assign(state, initialState);
     },
 }

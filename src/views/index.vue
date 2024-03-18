@@ -1,5 +1,3 @@
-
- 
 <template>
 	<div class="center">
 		<div class="logon">

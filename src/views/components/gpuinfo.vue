@@ -201,11 +201,11 @@ export default{
             },
             {
               value: 'chart5',
-              label: '使用率统计',
+              label: '使用率',
             },
             {
               value: 'chart6',
-              label: '温度统计',
+              label: '温度',
             },
           ]
         }
