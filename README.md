@@ -7,10 +7,21 @@
 <br><br><br><br>
 
 ## 如何运行(需要配合后端一起启动以及node环境)
+**部署项目**
+```
+git clone https://github.com/dianayyds/GPU-frontend.git
+```
+
+**进入项目**
+```
+cd GPU-frontend
+```
+
 **下载依赖**
 ```
 npm install
 ```
+
 **启动**
 ```
 npm run dev
