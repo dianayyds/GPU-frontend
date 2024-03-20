@@ -27,5 +27,7 @@ npm install
 npm run dev
 ```
 
+**[后端](https://github.com/dianayyds/GPU-backend.git)启动后，按住ctrl+鼠标右键点击绿色链接即可**
+
 
 
