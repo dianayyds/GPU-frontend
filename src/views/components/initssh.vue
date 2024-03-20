@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: #eee;">
+  <div>
     <div v-if="!isSshConnected" @keyup.enter="submitForm" tabindex="0">
       <el-form ref="dbForm" :model="dbInfo" label-width="120px" >
         <el-form-item label="IP 地址">
@@ -27,7 +27,6 @@
       <div class="content">
         <h1><el-icon><SuccessFilled /></el-icon>已连接</h1>
         <p>服务器连接已成功初始化,无需重复连接。</p>
-        <el-button @click="GOTOsystem">前往监测系统</el-button>
       </div>
   </div>
     </div>
@@ -49,9 +48,6 @@
       };
     },
     methods: {
-        GOTOsystem(){
-          this.$router.push('/gpuinfo')
-        },
         resetForm(){
             this.sshInfo.host=""
             this.sshInfo.port=""

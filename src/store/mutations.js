@@ -5,11 +5,11 @@ export default{
     //   systemUsage: 系统空间使用率,
     //   idleUsage: CPU空闲率,
     // 将用户空间使用率推送到对应数组
-    state.userUsages.push(payload.userUsage);
+    state.cpuusage.userUsage.push(payload.userUsage);
     // 将系统空间使用率推送到对应数组
-    state.systemUsages.push(payload.systemUsage);
+    state.cpuusage.systemUsage.push(payload.systemUsage);
     // 将CPU空闲率推送到对应数组
-    state.idleUsages.push(payload.idleUsage);
+    state.cpuusage.idleUsage.push(payload.idleUsage);
     // 将时间戳推送到对应数组
     state.cpuxdata.push(new Date().toLocaleTimeString());
     },
@@ -37,20 +37,24 @@ export default{
     state.gpuxdata.push(new Date().toLocaleTimeString());
     },
     ResetStore(state){
-        const initialState={
-            ismonitoring:false,
-            sshInitialized:false,
-            cpuxdata:[],
-            userUsages:[],
-            systemUsages:[],
-            idleUsages:[],
-            isAdmin:false,
-            gpuxdata:[],
-            powerDraws:{},
-            utilizations:{},
-            temperatures:{},
+       let initialState={
+              ismonitoring:false,
+              sshInitialized:false,
+              cpuxdata:[],
+
+              cpuusage:{
+                userUsage:[],
+                systemUsage:[],
+                idleUsage:[],
+              },
+
+              isAdmin:false,
+              gpuxdata:[],
+              powerDraws:{},
+              utilizations:{},
+              temperatures:{},
           };
           //将所有数据初始化
         Object.assign(state, initialState);
-    },
+   },
 }

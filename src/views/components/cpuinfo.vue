@@ -32,6 +32,7 @@
     </el-table>
 
     <div class="flex-container">
+      <!-- cpu_usage_linechart -->
       <div class="chart_cpu_usage" id="chart1">
           <smoothLineChart 
                           ref="chartcomponent1"
@@ -39,15 +40,28 @@
         </div>
     </div>
 
-  </div>
+    
+    <h3 class="subtitle">统计数据</h3>
 
-  <div v-else style="background-color: #eee;">
+    <el-table  :data="tableData1" style="width: 100%" id="table1">
+    <el-table-column label="GPU温度(摄氏度)">
+      <el-table-column prop="name" label="指标"  />
+      <el-table-column prop="avg" label="平均值"  />
+      <el-table-column prop="max" label="最大值" />
+      <el-table-column prop="min" label="最小值"  />
+      <el-table-column prop="var" label="方差"  />
+      <el-table-column prop="sd" label="标准差"  />
+    </el-table-column>
+    </el-table>
+
+</div>
+
+  <div v-else>
       <div class="connection-initialized">
       <div class="content">
         <h1><el-icon><WarningFilled /></el-icon>
           未初始化服务器
         </h1>
-        <el-button @click="GOTOsystem">前往初始化服务器</el-button>
       </div>
   </div>
   </div>
@@ -65,18 +79,27 @@
         }],
         chart1: {
         },
+        chart2: {
+        },
+        tableData1:[],
         interval1:null,
+        interval2:null,
         selectoptions:[
         {
-          label:"监测数据",
+          label:"服务器信息",
           options:[
             {
               value: 'base_info',
               label: '服务器信息',
             },
+          ]
+        },
+        {
+          label:"监测数据",
+          options:[
             {
               value: 'chart1',
-              label: 'CPU使用率',
+              label: '使用率',
             },
           ]
         },
@@ -84,10 +107,9 @@
           label:"统计数据",
           options:[
             {
-              value: 'chart2',
-              label: 'CPU使用率',
+              value: 'table1',
+              label: '使用率',
             },
-
           ]
         }
       ],
@@ -97,10 +119,13 @@
     beforeUnmount() {
       clearInterval(this.interval1);
       this.interval1=null;
+      clearInterval(this.interval2);
+      this.interval2=null;
     },
     async mounted(){
       await this.Getbaseinfo();
       this.initial_chart();
+      this.updatepage()
       if(this.$store.state.ismonitoring===true)
       this.StartMonitor();
       else
@@ -120,11 +145,15 @@
         this.$store.state.ismonitoring=true;
         if(this.interval1===null)
         this.interval1 = setInterval(this.fetchData, 2000);
+        if(this.interval2===null)
+        this.interval2 = setInterval(this.updatepage, 2000);
       },
       async StopMonitor(){
         this.$store.state.ismonitoring=false;
         clearInterval(this.interval1);
+        clearInterval(this.interval2);
         this.interval1=null;
+        this.interval2=null;
       },
       async fetchData(){
         await this.$api.gpu_info().then((params)=>{
@@ -148,10 +177,9 @@
           }
           this.$store.commit('Pushcpuinfo',params.data);
         })
-        this.updatechart1();
       },
       initial_chart(){
-      if(this.$store.state.userUsages.length===0)
+      if(this.$store.state.cpuusage.userUsage.length===0)
       {
         const xData = [];
         const yData = [];
@@ -181,20 +209,57 @@
               {
                 chartTitle: 'CPU利用率(%)',
                 xAxisData: this.$store.state.cpuxdata,
-                seriesData: [
-                { name: '用户程序占CPU百分比', type: 'line', data: this.$store.state.userUsages },
-                { name: '系统程序占CPU百分比', type: 'line', data: this.$store.state.systemUsages },
-                { name: 'CPU空闲率', type: 'line', data: this.$store.state.idleUsages },
-              ],
-              xAxisName: '时间轴', 
-              yAxisName: '%', // 设置 yAxisName 的值
-              yAxis_min: 0,
-              yAxis_max: 100,
-              yAxis_interval: 20,
+                seriesData: Object.keys(this.$store.state.cpuusage).map((key) => {
+                  return { name: key, type: 'line', data: this.$store.state.cpuusage[key] }
+                }),
+                xAxisName: '时间轴', 
+                yAxisName: '%', // 设置 yAxisName 的值
+                yAxis_min: 0,
+                yAxis_max: 100,
+                yAxis_interval: 20,
               };
           this.chart1 = tmpcpuinfo;
           this.$refs.chartcomponent1.updateData(this.chart1); 
-
+      },
+      updatechart2(){
+        let tmpcpuinfo = 
+              {
+                chartTitle: 'CPU利用率(%)',
+                xAxisData: this.$store.state.cpuxdata,
+                seriesData: Object.keys(this.$store.state.cpuusage).map((key) => {
+                  return { name: key, type: 'line', data: this.$store.state.cpuusage[key] }
+                }),
+                xAxisName: '时间轴', 
+                yAxisName: '%', // 设置 yAxisName 的值
+                yAxis_min: 0,
+                yAxis_max: 100,
+                yAxis_interval: 20,
+              };
+          this.chart1 = tmpcpuinfo;
+          this.$refs.chartcomponent1.updateData(this.chart1); 
+      },
+      updatepage(){
+        if(this.$store.state.cpuusage.userUsage.length!=0)
+        {
+          this.tableData1 = Object.keys(this.$store.state.cpuusage).map(key => {
+            const cpuusage = this.$store.state.cpuusage[key];
+            const avg = cpuusage.reduce((a, b) => a + b, 0) / cpuusage.length;
+            // 计算方差
+            const varSum = cpuusage.reduce((a, b) => a + (b - avg) ** 2, 0);
+            const variance = varSum / cpuusage.length;
+            // 计算标准差
+            const standardDeviation = Math.sqrt(variance);
+            return {
+              name: key,
+              avg: parseFloat(avg.toFixed(2)),
+              max: Math.max(...cpuusage),
+              min: Math.min(...cpuusage),
+              var: parseFloat(variance.toFixed(2)),  // 方差
+              sd: parseFloat(standardDeviation.toFixed(2))  // 标准差
+            };
+            });
+        }
+        this.updatechart1();
       },
       scrollTo(id){
         const element = document.getElementById(id);

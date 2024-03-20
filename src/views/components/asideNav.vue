@@ -10,28 +10,28 @@
          <el-menu router unique-opened>
           <el-sub-menu v-if=!isAdmin index="1" >
             <template #title>
-              <el-icon><InfoFilled /></el-icon>
+              <el-icon><Setting /></el-icon>
               <span>服务器连接</span>
             </template>
               <el-menu-item index="/initssh">
-                <el-icon><InfoFilled /></el-icon>
+                <el-icon><House /></el-icon>
                 <span>连接服务器</span>
               </el-menu-item>
           </el-sub-menu>
 
           <el-sub-menu v-if=!isAdmin index="2">
             <template #title>
-              <el-icon><InfoFilled /></el-icon>
-              <span>检测服务</span>
+              <el-icon><VideoCamera /></el-icon>
+              <span>监测服务</span>
             </template>
 
             <el-menu-item index="/cpuinfo">
-            <el-icon><InfoFilled /></el-icon>
+              <el-icon><Cpu /></el-icon>
              <span>CPU信息</span>
            </el-menu-item>
 
            <el-menu-item index="/gpuinfo">
-            <el-icon><InfoFilled /></el-icon>
+            <el-icon><Printer /></el-icon>
              <span>GPU信息</span>
            </el-menu-item>
           </el-sub-menu>
@@ -58,8 +58,7 @@ import src from '@/assets/bjtu.jpg'
       isAdmin:this.$store.state.isAdmin,
       bjtu:src,
     }
-   }
-
+   },
  };
  </script>
   
@@ -74,16 +73,16 @@ import src from '@/assets/bjtu.jpg'
   background-color: #eee;
   color: #000;
  }
+ 
  .el-aside {
   background-color: #eee;
   width:190px;
   position: absolute;
   top: 5px;
-  height: 100vh;
-  box-shadow: 5px 0 6px rgba(15, 14, 14, 0.35); /* 菜单栏右侧阴影  0  阴影扩散范围 阴影的颜色 */
-     /* 菜单栏整体的背景色 */
+  height: 99vh;
+  box-shadow: 5px 0 6px rgba(15, 14, 14, 0.35); 
  }  
- /*菜单栏logo图标和文字的距离*/
+
  .title {
    margin-left: 10px; 
  }

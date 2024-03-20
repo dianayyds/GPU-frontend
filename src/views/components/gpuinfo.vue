@@ -73,12 +73,14 @@
     <h3 class="subtitle">统计数据</h3>
 
     <div style="margin-top: 30px;">
+
     <div class="chart_cpu_usage" id="chart4">
       <keep-alive>
           <barChart 
                          ref="chartcomponent4"/>
                         </keep-alive>
     </div>
+
     <el-table  id="table" :data="tableData3" style="width: 100%">
     <el-table-column label="GPU功率(瓦特)">
       <el-table-column prop="name" label="GPU编号"  />
@@ -89,6 +91,7 @@
       <el-table-column prop="sd" label="标准差"  />
     </el-table-column>
     </el-table>
+
     <div class="gradient-divider"></div>
     
 
@@ -134,13 +137,12 @@
   <div class="gradient-divider"></div>
 </div>
 
-<div v-else style="background-color: #eee;">
+<div v-else>
       <div class="connection-initialized">
       <div class="content">
         <h1><el-icon><WarningFilled /></el-icon>
           未初始化服务器
         </h1>
-        <el-button @click="GOTOsystem">前往初始化服务器</el-button>
       </div>
   </div>
 </div>
@@ -218,7 +220,7 @@ export default{
   async mounted(){
     await this.Getbaseinfo();
     this.initial_chart();
-    this.updatetable();
+    this.updatepage();
     if(this.$store.state.ismonitoring===true)
     this.StartMonitor();
     else
@@ -248,7 +250,7 @@ export default{
       if(this.interval1===null)
       this.interval1 = setInterval(this.fetchData, 2000);
       if(this.interval2===null)
-      this.interval2 = setInterval(this.updatetable, 10000);
+      this.interval2 = setInterval(this.updatepage, 2000);
     },
     StopMonitor(){
       this.$store.state.ismonitoring=false;
@@ -279,7 +281,7 @@ export default{
         }
         this.$store.commit('Pushcpuinfo',params.data);
       })
-      this.updatechart()
+      
     },
     initial_chart(){
     if(this.$store.state.powerDraws.length===0)
@@ -437,7 +439,7 @@ export default{
       this.chart6 = tmpgpuinfo;
       this.$refs.chartcomponent6.updateData(this.chart6); 
     },
-    updatetable(){
+    updatepage(){
       this.tableData1 = Object.keys(this.$store.state.temperatures).map(gpuName => {
       const temperatures = this.$store.state.temperatures[gpuName];
       const avg = temperatures.reduce((a, b) => a + b, 0) / temperatures.length;
@@ -489,14 +491,16 @@ export default{
               sd: parseFloat(standardDeviation.toFixed(2))  // 标准差
             };
       });
-      this.updatechart4();
-      this.updatechart5();
-      this.updatechart6();
+      this.updatechart()
+
     },
     updatechart(){
       this.updatechart1()
       this.updatechart2()
       this.updatechart3()
+      this.updatechart4();
+      this.updatechart5();
+      this.updatechart6();
     },
     scrollTo(id){
       const element = document.getElementById(id);

@@ -8,9 +8,13 @@ const store = createStore({
         ismonitoring:false,
         sshInitialized:false,
         cpuxdata:[],
-        userUsages:[],
-        systemUsages:[],
-        idleUsages:[],
+
+        cpuusage:{
+          userUsage:[],
+          systemUsage:[],
+          idleUsage:[],
+        },
+
         isAdmin:false,
         gpuxdata:[],
         powerDraws:{},
