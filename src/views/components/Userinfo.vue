@@ -13,36 +13,30 @@
 <script>
 import { ElMessage } from 'element-plus';
 
-        export default {
-          async mounted() {
-            await this.$api.users_info().then((param)=>{
-                this.users=param.data.users;
-                this.users.forEach(user => {
-                // 检查 DatabaseName 是否为空
-                if (!user.DatabaseName) {
-                user.DatabaseName = 'NULL';
-                }
-                });
-              })
-          },
-          data() {
-            return {
-              users: []
-            };
-          },
-          methods: { 
-            async handleDeleteClick(scope){
-              let res={
-                "Username":scope.row.Username,
-                "Password":scope.row.Password,
-              }
-              await this.$api.delete_user(res);
-              ElMessage({
-                message: '删除成功',
-                type: 'success'
-              });
-              this.users.splice(scope.$index, 1);
-            }
-          }
-          }
-        </script>
+export default {
+  async mounted() {
+    await this.$api.users_info().then((param)=>{
+        this.users=param.data.users;
+      })
+  },
+  data() {
+    return {
+      users: []
+    };
+  },
+  methods: { 
+    async handleDeleteClick(scope){
+      let res={
+        "Username":scope.row.Username,
+        "Password":scope.row.Password,
+      }
+      await this.$api.delete_user(res);
+      ElMessage({
+        message: '删除成功',
+        type: 'success'
+      });
+      this.users.splice(scope.$index, 1);
+    }
+  }
+  }
+</script>

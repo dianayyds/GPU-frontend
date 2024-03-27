@@ -3,16 +3,16 @@
     <div v-if="!isSshConnected" @keyup.enter="submitForm" tabindex="0">
       <el-form ref="dbForm" :model="dbInfo" label-width="120px" >
         <el-form-item label="IP 地址">
-          <el-input v-model="sshInfo.host" placeholder="请输入服务器IP地址"></el-input>
+          <el-input v-model="sshInfo.Host" placeholder="请输入服务器IP地址"></el-input>
         </el-form-item>
         <el-form-item label="端口">
-          <el-input v-model="sshInfo.port" placeholder="请输入连接端口"></el-input>
+          <el-input v-model="sshInfo.Port" placeholder="请输入连接端口"></el-input>
         </el-form-item>
         <el-form-item label="账户名">
-          <el-input v-model="sshInfo.user" placeholder="请输入用户名"></el-input>
+          <el-input v-model="sshInfo.User" placeholder="请输入用户名"></el-input>
         </el-form-item>
         <el-form-item label="密码">
-          <el-input v-model="sshInfo.password" placeholder="请输入密码" type="password"></el-input>
+          <el-input v-model="sshInfo.Password" placeholder="请输入密码" type="password"></el-input>
         </el-form-item>
 
         <el-form-item>
@@ -39,22 +39,28 @@
     data() {
       return {
         sshInfo: {
-            host: '211.71.76.205',
-            port:'22',
-            user: 'ycx', 
-            password: '20231105',    
+            Username:'',
+            Host: '211.71.76.205',
+            Port:'22',
+            User: 'ycx', 
+            Password: '20231105',    
         },
         isSshConnected:this.$store.state.isSshConnected,
       };
     },
     methods: {
         resetForm(){
-            this.sshInfo.host=""
-            this.sshInfo.port=""
-            this.sshInfo.user=""
-            this.sshInfo.password=""
+            this.sshInfo.Host=""
+            this.sshInfo.Port=""
+            this.sshInfo.User=""
+            this.sshInfo.Password=""
         },
       async submitForm() {
+        let token=localStorage.getItem('token')
+        await this.$api.parse_token({Token:token}).then((params)=>{
+          this.sshInfo.Username=params.data.claims.username
+        }
+        )
         await this.$api.ssh_connect(this.sshInfo).then((params)=>{
           if(params.data.code==0){
             this.$store.state.isSshConnected=true;
