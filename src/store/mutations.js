@@ -13,6 +13,9 @@ export default{
     // 将时间戳推送到对应数组
     state.cpuxdata.push(new Date().toLocaleTimeString());
     },
+    Pushmemoryinfo(state,payload){
+        state.memoryUsages.push(payload.memoryUsage);
+    },
     Pushgpuinfo(state,payload){
     // payload的结构是：
     // {
@@ -56,5 +59,5 @@ export default{
           };
           //将所有数据初始化
         Object.assign(state, initialState);
-   },
+    },
 }

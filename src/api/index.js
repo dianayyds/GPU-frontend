@@ -97,3 +97,10 @@ export function ssh_connect(params){
     })
 }
 
+export function memory_info(params){
+    return request({
+        url:'/memory_info',
+        method:'get',
+        params
+    })
+}

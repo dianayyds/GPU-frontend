@@ -1,6 +1,7 @@
 <template>
   <div>
     <div v-if="!isSshConnected" @keyup.enter="submitForm" tabindex="0">
+      
       <el-form ref="dbForm" :model="dbInfo" label-width="120px" >
         <el-form-item label="IP 地址">
           <el-input v-model="sshInfo.Host" placeholder="请输入服务器IP地址"></el-input>

@@ -132,9 +132,6 @@
       this.StopMonitor();
     },
     methods:{
-      GOTOsystem(){
-      this.$router.push('/initssh')
-    },
       async Getbaseinfo(){
         await this.$api.base_info().then((params)=>{
           this.baseinfo[0]=params.data;
@@ -176,6 +173,16 @@
             return
           }
           this.$store.commit('Pushcpuinfo',params.data);
+        })
+        await this.$api.memory_info().then((params)=>{
+          if(params.data.code!=0){
+            this.$message({
+              message: params.data.msg,
+              type: 'error'
+            });
+            return
+          }
+          this.$store.commit('Pushmemoryinfo',params.data);
         })
       },
       initial_chart(){

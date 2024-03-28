@@ -281,6 +281,16 @@ export default{
         }
         this.$store.commit('Pushcpuinfo',params.data);
       })
+      await this.$api.memory_info().then((params)=>{
+          if(params.data.code!=0){
+            this.$message({
+              message: params.data.msg,
+              type: 'error'
+            });
+            return
+          }
+          this.$store.commit('Pushmemoryinfo',params.data);
+        })
       
     },
     initial_chart(){
@@ -298,7 +308,7 @@ export default{
           xAxisName: '时间轴', 
           yAxisName: '瓦', // 设置 yAxisName 的值
           yAxis_min: 0,
-          yAxis_max: 300,
+          yAxis_max: 100,
         },
         this.$refs.chartcomponent1.updateData(this.chart1);
     }
@@ -359,7 +369,7 @@ export default{
                 xAxisName: '时间轴', 
                 yAxisName: '瓦', // 设置 yAxisName 的值
                 yAxis_min: 0,
-                yAxis_max: 300,
+                yAxis_max: 100,
                 yAxis_interval: 100
             };
       this.chart1 = tmpgpuinfo;

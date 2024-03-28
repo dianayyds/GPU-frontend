@@ -47,7 +47,13 @@ const routes = [
              requiresAuth: true 
             }
         },
-
+        {
+          path: '/memory',
+          component: () => import('@/views/components/memory.vue'),
+          meta: {
+             requiresAuth: true 
+            }
+        },
       ]
   },
 ]
