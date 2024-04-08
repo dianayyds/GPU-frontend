@@ -104,3 +104,12 @@ export function memory_info(params){
         params
     })
 }
+
+
+export function ssh_info(params){
+    return request({
+        url:'/ssh_info',
+        method:'get',
+        params
+    })
+}

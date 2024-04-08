@@ -62,7 +62,7 @@
           type: 'line'
         })),
         };
-        this.chart.setOption(option,false);
+        this.chart.setOption(option,true);
       },
     }
   };

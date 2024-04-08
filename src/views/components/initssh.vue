@@ -1,19 +1,26 @@
 <template>
   <div>
-    <div v-if="!isSshConnected" @keyup.enter="submitForm" tabindex="0">
+    <div>
+    连接服务器：
+    </div>
+    
+    <div style="margin-top:30px;" v-if="!isSshConnected" @keyup.enter="submitForm" tabindex="0">
       
-      <el-form ref="dbForm" :model="dbInfo" label-width="120px" >
+      <el-form  style="max-width: 300px" ref="dbForm" :model="dbInfo" label-width="auto" >
         <el-form-item label="IP 地址">
-          <el-input v-model="sshInfo.Host" placeholder="请输入服务器IP地址"></el-input>
+          <el-input v-model="sshInfo.Host" placeholder="服务器IP地址"></el-input>
         </el-form-item>
         <el-form-item label="端口">
-          <el-input v-model="sshInfo.Port" placeholder="请输入连接端口"></el-input>
+          <el-input v-model="sshInfo.Port" placeholder="连接端口"></el-input>
         </el-form-item>
         <el-form-item label="账户名">
-          <el-input v-model="sshInfo.User" placeholder="请输入用户名"></el-input>
+          <el-input v-model="sshInfo.User" placeholder="用户名"></el-input>
         </el-form-item>
         <el-form-item label="密码">
-          <el-input v-model="sshInfo.Password" placeholder="请输入密码" type="password"></el-input>
+          <el-input v-model="sshInfo.Password" placeholder="密码" type="password"></el-input>
+        </el-form-item>
+        <el-form-item label="间隔时间(ms)">
+          <el-input  v-model="sshInfo.Time" placeholder="时间" ></el-input>
         </el-form-item>
 
         <el-form-item>
@@ -45,6 +52,7 @@
             Port:'22',
             User: 'ycx', 
             Password: '20231105',    
+            Time:"2000",
         },
         isSshConnected:this.$store.state.isSshConnected,
       };

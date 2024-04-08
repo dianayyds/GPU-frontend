@@ -49,24 +49,28 @@
     <div style="margin-top:30px">
       <h3 class="subtitle">监测数据</h3>
       <div class="flex-container">
+
         <div class="chart_cpu_usage" id="chart1">
           <keep-alive>
               <smoothLineChart 
                             ref="chartcomponent1"/>
             </keep-alive>
         </div>
+
         <div class="chart_cpu_usage" id="chart2">
           <keep-alive>
               <smoothLineChart 
                             ref="chartcomponent2"/>
           </keep-alive>
         </div>
+
         <div class="chart_cpu_usage" id="chart3">
           <keep-alive>
               <smoothLineChart 
                             ref="chartcomponent3"/>
                             </keep-alive>
         </div>
+
       </div>
     </div>
 
@@ -233,9 +237,6 @@ export default{
       this.interval2=null;
   },
   methods:{
-    GOTOsystem(){
-      this.$router.push('/initssh')
-    },
     async Getbaseinfo(){
       await this.$api.base_info().then((params)=>{
         this.baseinfo[0]=params.data;
@@ -269,6 +270,7 @@ export default{
           return
         }
         this.$store.commit('Pushgpuinfo',params.data);
+        console.log("gpuinfo",params.data)
       })
       await this.$api.cpu_info().then((params)=>{
         //用户空间使用、系统空间使用和CPU空闲的值,params.data.userUsage|systemUsage|idle
@@ -308,7 +310,7 @@ export default{
           xAxisName: '时间轴', 
           yAxisName: '瓦', // 设置 yAxisName 的值
           yAxis_min: 0,
-          yAxis_max: 100,
+          yAxis_max: 300,
         },
         this.$refs.chartcomponent1.updateData(this.chart1);
     }
@@ -369,9 +371,10 @@ export default{
                 xAxisName: '时间轴', 
                 yAxisName: '瓦', // 设置 yAxisName 的值
                 yAxis_min: 0,
-                yAxis_max: 100,
+                yAxis_max: 300,
                 yAxis_interval: 100
             };
+      console.log("seriesData:",tmpgpuinfo.seriesData)
       this.chart1 = tmpgpuinfo;
       this.$refs.chartcomponent1.updateData(this.chart1); 
     },

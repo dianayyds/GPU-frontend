@@ -11,7 +11,7 @@
           <el-sub-menu v-if=!isAdmin index="1" >
             <template #title>
               <el-icon><Setting /></el-icon>
-              <span>服务器连接</span>
+              <span>任务设定</span>
             </template>
               <el-menu-item index="/initssh">
                 <el-icon><House /></el-icon>
@@ -61,7 +61,7 @@
           </el-sub-menu>
 
           <div v-if=isAdmin>
-           <el-menu-item index="/Userinfo">
+           <el-menu-item index="/userinfo">
             <el-icon><location /></el-icon>
              <span>用户信息</span>
            </el-menu-item>
