@@ -113,3 +113,20 @@ export function ssh_info(params){
         params
     })
 }
+
+export function who_info(params){
+    return request({
+        url:'/who_info',
+        method:'get',
+        params
+    })
+}
+
+export function w_info(params){
+    return request({
+        url:'/w_info',
+        method:'get',
+        params
+    })
+}
+

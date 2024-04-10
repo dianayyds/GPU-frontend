@@ -37,8 +37,8 @@
 
 
            <el-menu-item index="/memory">
-            <el-icon><Printer /></el-icon>
-             <span>内存使用</span>
+            <el-icon><DataAnalysis /></el-icon>
+             <span>内存信息</span>
            </el-menu-item>
           </el-sub-menu>
           
@@ -46,18 +46,15 @@
           <el-sub-menu v-if=!isAdmin index="3">
             <template #title>
               <el-icon><VideoCamera /></el-icon>
-              <span>关键函数分析</span>
+              <span>用户行为</span>
             </template>
 
-            <el-menu-item index="">
+            <el-menu-item index="/w">
               <el-icon><Cpu /></el-icon>
-             <span>卷积</span>
+              用户行为
+             <span></span>
            </el-menu-item>
 
-           <el-menu-item index="">
-            <el-icon><Printer /></el-icon>
-             <span>矩阵</span>
-           </el-menu-item>
           </el-sub-menu>
 
           <div v-if=isAdmin>

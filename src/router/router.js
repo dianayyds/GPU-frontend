@@ -54,6 +54,13 @@ const routes = [
              requiresAuth: true 
             }
         },
+        {
+          path: '/w',
+          component: () => import('@/views/components/w.vue'),
+          meta: {
+             requiresAuth: true 
+            }
+        },
       ]
   },
 ]

@@ -22,13 +22,22 @@
     </div>
   
 
-    <el-table :data="baseinfo" style="width: 100%" id="base_info">
+    <el-table :data="baseinfo" height="100" style="width: 100%" id="base_info">
       <el-table-column prop="operatingSystem" label="操作系统" ></el-table-column>
       <el-table-column prop="hostname" label="主机名" ></el-table-column>
       <el-table-column prop="kernelVersion" label="内核版本"></el-table-column>
       <el-table-column prop="cpuArchitecture" label="CPU架构" ></el-table-column>
       <el-table-column prop="release" label="发行版版本" ></el-table-column>
       <el-table-column prop="host" label="ip地址"></el-table-column>
+    </el-table>
+
+    <el-table :data="winfo" style="width: 100%">
+      <el-table-column prop="cpunum" label="cpu数量" width="180" />
+      <el-table-column prop="cpucorenum" label="cpu核心数" width="220" />
+      <el-table-column prop="load1min" label="一分钟负载" width="180" />
+      <el-table-column prop="load5min" label="五分钟负载" width="180" />
+      <el-table-column prop="load15min" label="十五分钟负载" width="180" />
+      <el-table-column prop="idealload" label="理想负载" width="180" />
     </el-table>
 
     <div class="flex-container">
@@ -75,6 +84,8 @@
     },
     data(){
       return{
+        winfo:[{
+        }],
         baseinfo: [{
         }],
         chart1: {
@@ -125,6 +136,7 @@
     async mounted(){
       await this.Getbaseinfo();
       this.initial_chart();
+      
       this.updatepage()
       if(this.$store.state.ismonitoring===true)
       this.StartMonitor();
@@ -136,6 +148,9 @@
         await this.$api.base_info().then((params)=>{
           this.baseinfo[0]=params.data;
         })
+        await this.$api.w_info().then((param)=>{
+        this.winfo[0]=param.data
+      })
 
       },
       async StartMonitor(){
