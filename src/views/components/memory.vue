@@ -144,6 +144,10 @@
             this.interval1 = setInterval(this.fetchData, 2000);
             if(this.interval2===null)
             this.interval2 = setInterval(this.updatepage, 2000);
+            this.$message({
+        message: '监测进行中',
+        type: 'success'
+        });
         },
         async StopMonitor(){
             this.$store.state.ismonitoring=false;
@@ -151,6 +155,10 @@
             clearInterval(this.interval2);
             this.interval1=null;
             this.interval2=null;
+            this.$message({
+        message: '监测停止中',
+        type: 'error'
+        });
         },
         async fetchData(){
             await this.$api.gpu_info().then((params)=>{

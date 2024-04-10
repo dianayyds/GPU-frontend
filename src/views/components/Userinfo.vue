@@ -31,11 +31,9 @@ export default {
   async mounted() {
     await this.$api.users_info().then((param)=>{
         this.users=param.data.users;
-        console.log("users",this.users)
       })
       await this.$api.ssh_info().then((param)=>{
         this.sshinfo=param.data.sshinfo;
-        console.log("sshinfo",this.sshinfo)
       })
   },
   data() {

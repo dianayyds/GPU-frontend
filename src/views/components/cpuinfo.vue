@@ -31,6 +31,8 @@
       <el-table-column prop="host" label="ip地址"></el-table-column>
     </el-table>
 
+    <div class="gradient-divider"></div>
+
     <el-table :data="winfo" style="width: 100%">
       <el-table-column prop="cpunum" label="cpu数量" width="180" />
       <el-table-column prop="cpucorenum" label="cpu核心数" width="220" />
@@ -39,6 +41,8 @@
       <el-table-column prop="load15min" label="十五分钟负载" width="180" />
       <el-table-column prop="idealload" label="理想负载" width="180" />
     </el-table>
+    <div class="gradient-divider"></div>
+
 
     <div class="flex-container">
       <!-- cpu_usage_linechart -->
@@ -136,7 +140,6 @@
     async mounted(){
       await this.Getbaseinfo();
       this.initial_chart();
-      
       this.updatepage()
       if(this.$store.state.ismonitoring===true)
       this.StartMonitor();
@@ -159,6 +162,10 @@
         this.interval1 = setInterval(this.fetchData, 2000);
         if(this.interval2===null)
         this.interval2 = setInterval(this.updatepage, 2000);
+        this.$message({
+        message: '监测进行中',
+        type: 'success'
+        });
       },
       async StopMonitor(){
         this.$store.state.ismonitoring=false;
@@ -166,6 +173,10 @@
         clearInterval(this.interval2);
         this.interval1=null;
         this.interval2=null;
+        this.$message({
+        message: '监测停止中',
+        type: 'error'
+        });
       },
       async fetchData(){
         await this.$api.gpu_info().then((params)=>{
