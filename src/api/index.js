@@ -130,3 +130,11 @@ export function w_info(params){
     })
 }
 
+
+export function lstm_info(params){
+    return request({
+        url:'/lstm_info',
+        method:'get',
+        params
+    })
+}

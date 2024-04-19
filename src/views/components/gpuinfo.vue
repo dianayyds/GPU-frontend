@@ -278,7 +278,6 @@ export default{
           return
         }
         this.$store.commit('Pushgpuinfo',params.data);
-        console.log("gpuinfo",params.data)
       })
       await this.$api.cpu_info().then((params)=>{
         //用户空间使用、系统空间使用和CPU空闲的值,params.data.userUsage|systemUsage|idle
@@ -382,7 +381,6 @@ export default{
                 yAxis_max: 300,
                 yAxis_interval: 100
             };
-      console.log("seriesData:",tmpgpuinfo.seriesData)
       this.chart1 = tmpgpuinfo;
       this.$refs.chartcomponent1.updateData(this.chart1); 
     },

@@ -2,10 +2,15 @@
 
 import axios from "axios";
 import { ElMessage } from "element-plus"
+import qs from "qs"
+
+axios.defaults.paramsSerializer = function(params) {
+  return qs.stringify(params, {arrayFormat: 'repeat', allowDots: true})
+};
 
 //创建axios的实例对象
 let request = axios.create({
-  //基础路径
+
   baseURL: 'http://localhost:8080/v1',
   timeout: 50000,
 })

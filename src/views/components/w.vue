@@ -54,6 +54,15 @@ export default {
 
 
       })
+      // if(this.$store.state.memoryUsages.length>45){
+      //   let payload={
+      //     Data:this.$store.state.memoryUsages.slice(-43),
+      //   }
+      //     await this.$api.lstm_info(payload).then((param)=>{
+      //        console.log("param.data",param.data)
+      // })
+      //   }
+      
     }
   }
   }
