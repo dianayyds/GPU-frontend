@@ -84,6 +84,7 @@
             tableData1:[],
             interval1:null,
             interval2:null,
+            interval3:null,
             selectoptions:[
             {
             label:"服务器信息",
@@ -121,6 +122,8 @@
         this.interval1=null;
         clearInterval(this.interval2);
         this.interval2=null;
+        clearInterval(this.interval3);
+        this.interval3=null;
         },
         async mounted(){
         await this.Getbaseinfo();
@@ -144,21 +147,25 @@
             this.interval1 = setInterval(this.fetchData, 2000);
             if(this.interval2===null)
             this.interval2 = setInterval(this.updatepage, 2000);
+            if(this.interval3===null)
+            this.interval3 = setInterval(this.lstmpred, 10000);
             this.$message({
-        message: '监测进行中',
-        type: 'success'
-        });
+            message: '监测进行中',
+            type: 'success'
+            });
         },
         async StopMonitor(){
             this.$store.state.ismonitoring=false;
             clearInterval(this.interval1);
             clearInterval(this.interval2);
+            clearInterval(this.interval3);
             this.interval1=null;
             this.interval2=null;
+            this.interval3=null;
             this.$message({
-        message: '监测停止中',
-        type: 'error'
-        });
+            message: '监测停止中',
+            type: 'error'
+            });
         },
         async fetchData(){
             await this.$api.gpu_info().then((params)=>{
@@ -192,6 +199,36 @@
             }
             this.$store.commit('Pushmemoryinfo',params.data);
             })
+        },
+        async lstmpred(){
+            if(this.$store.state.memoryUsages.length>=40){
+            let payload={
+            Data:this.$store.state.memoryUsages.slice(-40),
+            }
+            await this.$api.lstm_info(payload).then((param)=>{
+                console.log(this.get_time(),param.data.pred)
+            })
+            }
+        },
+        get_time(){
+            let year = new Date().getFullYear(); //获取当前时间的年份
+            let month = new Date().getMonth() + 1; //获取当前时间的月份
+            let day = new Date().getDate(); //获取当前时间的天数
+            let hours = new Date().getHours(); //获取当前时间的小时
+            let minutes = new Date().getMinutes(); //获取当前时间的分数
+            let seconds = new Date().getSeconds(); //获取当前时间的秒数
+            //当小于 10 的是时候，在前面加 0
+            if (hours < 10) {
+            hours = "0" + hours;
+            }
+            if (minutes < 10) {
+            minutes = "0" + minutes;
+            }
+            if (seconds < 10) {
+            seconds = "0" + seconds;
+            }
+            let times = year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
+            return times;
         },
         initial_chart(){
         if(this.$store.state.memoryUsages.length===0)

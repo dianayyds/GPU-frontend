@@ -19,8 +19,8 @@
         <el-form-item label="密码">
           <el-input v-model="sshInfo.Password" placeholder="密码" type="password"></el-input>
         </el-form-item>
-        <el-form-item label="间隔时间(ms)">
-          <el-input  v-model="sshInfo.Time" placeholder="时间" ></el-input>
+        <el-form-item label="内存使用率阈值">
+          <el-input  v-model="memory_VPT" placeholder="为100则不设置阈值" ></el-input>
         </el-form-item>
 
         <el-form-item>
@@ -52,9 +52,9 @@
             Port:'22',
             User: 'ycx', 
             Password: '20231105',    
-            Time:"2000",
         },
         isSshConnected:this.$store.state.isSshConnected,
+        memory_VPT:'',
       };
     },
     methods: {

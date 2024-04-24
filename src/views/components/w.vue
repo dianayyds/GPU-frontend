@@ -9,12 +9,12 @@
     <div class="gradient-divider"></div>  
     <h1>负载数据:</h1>
     <el-table :data="winfo" style="width: 100%" border stripe>
-      <el-table-column prop="cpunum" label="cpu数量" width="180" />
-      <el-table-column prop="cpucorenum" label="cpu核心数" width="220" />
-      <el-table-column prop="load1min" label="一分钟内负载" width="180" />
-      <el-table-column prop="load5min" label="五分钟内负载" width="180" />
-      <el-table-column prop="load15min" label="十五分钟内负载" width="180" />
-      <el-table-column prop="idealload" label="理想负载" width="180" />
+      <el-table-column prop="cpunum" label="cpu数量(个)" width="140" />
+      <el-table-column prop="cpucorenum" label="cpu核心数(个)" width="180" />
+      <el-table-column prop="load1min" label="过去一分钟平均负载(个)" width="180" />
+      <el-table-column prop="load5min" label="过去五分钟平均负载(个)" width="180" />
+      <el-table-column prop="load15min" label="过去十五分钟平均负载(个)" width="200" />
+      <el-table-column prop="idealload" label="理想负载(个)" width="180" />
     </el-table>
     <div class="gradient-divider"></div>
 
@@ -54,14 +54,7 @@ export default {
 
 
       })
-      // if(this.$store.state.memoryUsages.length>45){
-      //   let payload={
-      //     Data:this.$store.state.memoryUsages.slice(-43),
-      //   }
-      //     await this.$api.lstm_info(payload).then((param)=>{
-      //        console.log("param.data",param.data)
-      // })
-      //   }
+      
       
     }
   }

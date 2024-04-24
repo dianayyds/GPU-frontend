@@ -13,6 +13,8 @@
     "axios": "^1.6.5",
     "echarts": "^5.4.3",
     "element-plus": "^2.5.2",
+    "form-gen-parser": "^1.0.3",
+    "hexo-renderer-marked": "^6.3.0",
     "https-proxy-agent": "^7.0.4",
     "nprogress": "^0.2.0",
     "openai": "^4.28.4",
